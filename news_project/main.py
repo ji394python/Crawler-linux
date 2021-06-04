@@ -1,3 +1,5 @@
+# add type hint
+
 import os
 import csv
 import time
@@ -7,15 +9,17 @@ from datetime import datetime
 import pandas as pd
 from pandas_datareader import data as pdr 
 
-reason_dict = {'11a': '增資', '11b': '減資', '11c': '其他利益', '14a': '除權', '14b': '除息', '14c': '除權息', '17': '股東常會', 
-				'32': '股東常會', '51': '金控/股份轉換', '99': '其他1'}
+reason_dict = {
+	'11a': '增資', '11b': '減資', '11c': '其他利益', '14a': '除權', '14b': '除息',
+	'14c': '除權息', '17': '股東常會', '32': '股東常會', '51': '金控/股份轉換', '99': '其他1'
+	}
 
-stock_name_pd = pd.read_csv('stock_index_confirm.csv')['name']
+stock_name_pd = pd.read_csv('stock_index_confirm.csv')['name'] #讀取股票代號
 stock_name_list = []
 for i in stock_name_pd:
 	stock_name_list.append(i)
 
-holiday_pd = pd.read_csv('holiday.csv')['date']
+holiday_pd = pd.read_csv('holiday.csv')['date'] #讀取台灣例假日資訊 -> 需要補2021的
 holiday_list = []
 for i in holiday_pd:
 	cache_list = i.split('/')
@@ -28,13 +32,13 @@ for i in holiday_pd:
 		day = '0' + day
 	holiday_list.append(year + '/' + month + '/' + day)
 
-def finding(folder_path):
+def finding(folder_path:str):
 	allFileList = os.listdir(folder_path)
-	total_print_list = pd.DataFrame()
+	#total_print_list = pd.DataFrame()
 	return_list = []
 
 	for i in allFileList:
-		nameoffile = i
+		#nameoffile = i
 		file = open(folder_path + '/' + i, 'r', encoding = 'utf-8')
 		words = str(file.read())
 		#nameofstock[0] = 代號, nameofstock[1] = 中文名, nameofstock[2] = 發言時間
@@ -173,17 +177,17 @@ def finding(folder_path):
 
 
 #每日
-new_path = '../news_crawler/News'
+new_path = 'news_crawler/News'
 folder_name = os.listdir(new_path)
 
 if not path.exists('print/data.csv'):
-		with open('print/data.csv', 'a', newline='') as csvfile:
+		with open('print/data.csv', 'a', newline='',encoding='big5') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['0.股票代號', '1.股票名稱', '2.停券起日','3.停券迄日', '4.原因', '5.發言日期', '6.REASON'])
 			csvfile.close()
 
 if not path.exists('print/done_date.csv'):
-		with open('print/done_date.csv', 'a', newline='') as csvfile:
+		with open('print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['date'])
 			csvfile.close()
