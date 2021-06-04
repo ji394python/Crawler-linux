@@ -9,13 +9,13 @@ from bs4 import BeautifulSoup
 
 def strToFile(file, text):
     print ('Output: ' + file)
-    f = open(file, 'w')
+    f = open(file, 'w+')
     f.write(text)
     f.close()
 
 def strToAppend(file, text):
     #print 'output: ' + file
-    f = open(file, 'a')
+    f = open(file, 'a+')
     f.write(text + '\n')
     f.close()
 
