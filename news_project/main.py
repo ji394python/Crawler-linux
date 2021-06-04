@@ -173,7 +173,7 @@ def finding(folder_path):
 
 
 #每日
-new_path = 'C:/Users/User/Desktop/pytohncode/news_project/new_test'
+new_path = '../news_crawler/News'
 folder_name = os.listdir(new_path)
 
 if not path.exists('print/data.csv'):
