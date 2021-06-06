@@ -10,6 +10,9 @@ from datetime import datetime
 import pandas as pd
 from pandas_datareader import data as pdr 
 
+if os.path.exists('print') == False:
+	os.mkdir('print')
+
 reason_dict = {
 	'11a': '增資', '11b': '減資', '11c': '其他利益', '14a': '除權', '14b': '除息',
 	'14c': '除權息', '17': '股東常會', '32': '股東常會', '51': '金控/股份轉換', '99': '其他1'
@@ -40,7 +43,7 @@ def finding(folder_path:str):
 
 	for i in allFileList:
 		#nameoffile = i
-		file = open(folder_path + '/' + i, 'r', encoding = 'utf-8')
+		file = open(folder_path + '/' + i, 'r', encoding = 'utf-8-sig')
 		words = str(file.read())
 		#nameofstock[0] = 代號, nameofstock[1] = 中文名, nameofstock[2] = 發言時間
 		nameofstock = i.split('_')
