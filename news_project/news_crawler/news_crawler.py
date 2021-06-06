@@ -21,6 +21,7 @@ from argparse import RawTextHelpFormatter
 parser = argparse.ArgumentParser(description=
         '目標：下載公開資訊觀測站-每日重大訊息/歷史重大訊息 \
         \nOptional you can download data for a specific time range. (Required Now)\
+        \n \
         \nExamples: python3 news_crawler.py -st 06/01/2021 -et 06/04/2021 '
         , formatter_class=RawTextHelpFormatter)
 

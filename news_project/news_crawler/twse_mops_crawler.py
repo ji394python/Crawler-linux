@@ -28,7 +28,7 @@ if __name__ == '__main__':
     year = sys.argv[1]
     month = sys.argv[2]
     day = sys.argv[3]
-    output_folder = '/output2'
+    output_folder = 'News'
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]
     output_folder += '/{}{}{}'.format(year, month, day)

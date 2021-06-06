@@ -18,11 +18,11 @@ def strToFile(file, text):
 
 if __name__ == '__main__':
     # 輸入參數
-    output_folder = 'C:/Users/User/Desktop/pytohncode/new/news_crawler'
+    output_folder = 'News'
     today = strftime("%Y%m%d", gmtime())
     if len(sys.argv) == 2:
         output_folder = sys.argv[1]
-    output_folder += '\\'+ today
+    output_folder += '/'+ today
 
     # 建立輸出資料夾
     try:
