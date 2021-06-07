@@ -50,9 +50,11 @@ def finding(folder_path:str):
 
 		try:
 			if nameofstock[1] in stock_name_list:
+				print(nameofstock)
 				if words.find('停止過戶起始日期') != -1:
 					#日期
 					pos_trade_date = words.find('停止過戶起始日期')
+					print(pos_trade_date)
 					date_string = words[pos_trade_date:pos_trade_date + 19].strip()
 					date_string = date_string.split(':')
 					cache_date_string = date_string[1].split('/')
@@ -198,7 +200,7 @@ if not path.exists('print/done_date.csv'):
 
 name_done_list = pd.read_csv('print/done_date.csv')['date']
 str_name_done_list = []
-
+pd.read_csv(r'news_project\print\data.csv',encoding='big5')
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))
 
@@ -210,11 +212,11 @@ for DateInNew in folder_name:
 		print(cache)
 		print('-------------')
 		for index in cache:
-			with open('print/data.csv', 'a', newline='') as csvfile:
+			with open('print/data.csv', 'a', newline='',encoding='big5') as csvfile:
 				writer = csv.writer(csvfile)
 				writer.writerow([index[0], index[1], index[2], index[3], index[4], index[5], index[6]])
 			csvfile.close()
-		with open('print/done_date.csv', 'a', newline='') as csvfile:
+		with open('print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow([DateInNew])
 		csvfile.close()
