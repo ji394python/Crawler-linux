@@ -153,6 +153,6 @@ if __name__ == '__main__':
         time.sleep(0.8)
 
     # 關閉連線
-    resp.close()
-    resp2.close()
-    if resp3 != None: resp3.close()
+    # resp.close()
+    # resp2.close()
+    # if resp3 != None: resp3.close()
