@@ -43,4 +43,3 @@ for date_temp in dates:
     date=date_temp.strftime("%Y %m %d")
     #os.system('python3 twse_mops_crawler.py {date} \\News'.format(date=date)) #linux 
     os.system('python twse_mops_crawler.py {date} News'.format(date=date)) #windows
-

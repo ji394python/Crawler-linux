@@ -125,7 +125,7 @@ if __name__ == '__main__':
                 elif i == 9: value = '\n' + value
                 text += field[i] + '：' + value + '\n'
 
-            path = output_folder + '\\{}_{}_{}_{}.txt'.format(COMPANY_ID, COMPANY_NAME, data2['SPOKE_DATE'], SPOKE_TIME)
+            path = output_folder + '/{}_{}_{}_{}.txt'.format(COMPANY_ID, COMPANY_NAME, data2['SPOKE_DATE'], SPOKE_TIME)
 
         elif len(onclick_array) == 11:
             data3['co_id'] = onclick_array[3]
@@ -143,7 +143,7 @@ if __name__ == '__main__':
                 if tr3.a != None:
                     text += '其他：https://mops.twse.com.tw' + tr3.a['href']
 
-            path = output_folder + '\\{}_{}_{}_{}.txt'.format(COMPANY_ID, COMPANY_NAME, data3['DATE1'], SPOKE_TIME)
+            path = output_folder + '/{}_{}_{}_{}.txt'.format(COMPANY_ID, COMPANY_NAME, data3['DATE1'], SPOKE_TIME)
 
         strToFile(path, text)
         time.sleep(0.8)
