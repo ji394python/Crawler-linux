@@ -200,7 +200,6 @@ if not path.exists('print/done_date.csv'):
 
 name_done_list = pd.read_csv('print/done_date.csv')['date']
 str_name_done_list = []
-pd.read_csv(r'news_project\print\data.csv',encoding='big5')
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))
 
