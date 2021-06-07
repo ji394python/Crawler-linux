@@ -17,6 +17,10 @@ def strToFile(file, text):
     f.close()
 
 if __name__ == '__main__':
+    
+    if os.path.exists('News') == False:
+        os.mkdir('News')
+    
     # 輸入參數
     output_folder = 'News'
     today = strftime("%Y%m%d", gmtime())

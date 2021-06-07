@@ -20,6 +20,10 @@ def strToAppend(file, text):
     f.close()
 
 if __name__ == '__main__':
+
+    if os.path.exists('News') == False:
+        os.mkdir('News')
+    
     # 輸入參數
     if len(sys.argv) < 4:
         print('Usage: python twse_mops_crawler.py <year> <month> <day> <output_folder>')
