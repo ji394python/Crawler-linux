@@ -17,6 +17,8 @@ def strToFile(file, text):
     f.close()
 
 if __name__ == '__main__':
+
+    os.chdir('~/Crawler-linux/news_project/news_crawler') #crontab
     
     if os.path.exists('News') == False:
         os.mkdir('News')
