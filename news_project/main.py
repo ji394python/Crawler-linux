@@ -10,8 +10,6 @@ from datetime import datetime
 import pandas as pd
 from pandas_datareader import data as pdr 
 
-os.chdir('~/Crawler-linux/news_project') #crontab
-
 if os.path.exists('print') == False:
 	os.mkdir('print')
 
