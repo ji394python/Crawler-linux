@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     os.system('rm -r Shortable/IB/Raw')
 
-    with open('record.txt','w+') as f:
+    with open('record.txt','a+') as f:
         f.write(f"{datetime.datetime.now()}")
         f.close()
 
