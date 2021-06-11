@@ -1,0 +1,88 @@
+{
+    "usa": {
+        "中文": "美國",
+        "alpha2": "US",
+        "alpha3": "USA"
+    },
+    "swedish": {
+        "中文": "瑞典",
+        "alpha2": "SE",
+        "alpha3": "SWE"
+    },
+    "swiss": {
+        "中文": "瑞士",
+        "alpha2": "CH",
+        "alpha3": "CHE"
+    },
+    "canada": {
+        "中文": "加拿大",
+        "alpha2": "CA",
+        "alpha3": "CAN"
+    },
+    "spain": {
+        "中文": "西班牙",
+        "alpha2": "ES",
+        "alpha3": "ESP"
+    },
+    "australia": {
+        "中文": "澳洲",
+        "alpha2": "AU",
+        "alpha3": "AUS"
+    },
+    "austria": {
+        "中文": "奧地利",
+        "alpha2": "AU",
+        "alpha3": "AUS"
+    },
+    "belgium": {
+        "中文": "比利時",
+        "alpha2": "BE",
+        "alpha3": "BEL"
+    },
+    "british": {
+        "中文": "英國",
+        "alpha2": "GB",
+        "alpha3": "GBR"
+    },
+    "dutch": {
+        "中文": "荷蘭",
+        "alpha2": "NL",
+        "alpha3": "NLD"
+    },
+    "france": {
+        "中文": "法國",
+        "alpha2": "FR",
+        "alpha3": "FRA"
+    },
+    "germany": {
+        "中文": "德國",
+        "alpha2": "DE",
+        "alpha3": "DEU"
+    },
+    "hongkong": {
+        "中文": "香港",
+        "alpha2": "HK",
+        "alpha3": "HKG"
+    },
+    "india": {
+        "中文": "印度",
+        "alpha2": "IN",
+        "alpha3": "IND"
+    },
+    "italy": {
+        "中文": "義大利",
+        "alpha2": "IT",
+        "alpha3": "ITA"
+    },
+    "japan": {
+        "中文": "日本",
+        "alpha2": "JP",
+        "alpha3": "JPN"
+    },
+    "mexico": {
+        "中文": "墨西哥",
+        "alpha2": "MX",
+        "alpha3": "MEX"
+    }
+
+}
