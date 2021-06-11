@@ -3,6 +3,7 @@ import ftplib
 import json 
 import os 
 import csv
+import datetime
 
 #Shortable\IB\{Country}\{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 def convertCsv(filePath,outputPath):
@@ -67,6 +68,10 @@ if __name__ == '__main__':
             convertCsv('Shortable/IB/Raw/'+file,'Shortable/IB/'+name+'/'+name+'_Shortable_')
 
     os.system('rm -r Shortable/IB/Raw')
+
+    with open('record.txt','w+') as f:
+        f.write(f"{datetime.datetime.now()}")
+        f.close()
 
 
 #Shortable\IB\{Country}\{Date}\{Ticker}_{Country}_Shortable_{Date}.csv
