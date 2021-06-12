@@ -3,16 +3,32 @@ import ftplib
 import json 
 import os 
 import csv
-import datetime
+from datetime import datetime, tzinfo
+from dateutil import tz
 
-#Shortable\IB\{Country}\{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
+#- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
+#- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
+
 def convertCsv(filePath,outputPath):
+    ET = tz.gettz('America/New_York')
+    BJ = tz.gettz('Taiwan/Taipel')
     f = open(r'%s' % filePath,'rb+')
-    date = f.readline().decode('big5').strip().split('|')
-    day,time = date[1].replace('.','-'),date[2].replace(':','-')
+    date = f.readline().decode('big5').strip()
+    date = date[date.find('|')+1:]
+    
+    date_USD = datetime.strptime(date,"%Y.%m.%d|%H:%M:%S")
+    date_USD = date_USD.replace(tzinfo=ET)
+    #date = f.readline().decode('big5').strip().split('|')
+    date_NTD = str(date_USD.astimezone(BJ))
+    day,time = date_NTD[:10],date_NTD[11:19].replace(':',"-")
     header = [ i.replace('#','') for i in f.readline().decode('big5').strip().split('|')][:-1]
-    fileName = outputPath + day + '_' + time + '.csv' 
+    
+    index = outputPath.rfind('/Base')
+    headPath = outputPath[:index]
+    tailPath = outputPath[index+6:]
+    fileName = f"{headPath}/{day}/Base/{tailPath}{day}_{time}.csv"
     pathControl(fileName)
+
     file = open(fileName,'w+',encoding='big5',newline='')
     writer = csv.writer(file)
     writer.writerow(header)
@@ -53,7 +69,7 @@ def pathControl(path:str):
 
 
 if __name__ == '__main__':
-
+    
     country = json.load(open('country.json','r+',encoding='utf-8'))
     ftp = ftplib.FTP(host='ftp3.interactivebrokers.com',user='shortstock',passwd='')
     target = ftp.nlst()
@@ -65,14 +81,11 @@ if __name__ == '__main__':
             
             name = country[file[:-4]]['alpha2']
             
-            convertCsv('Shortable/IB/Raw/'+file,'Shortable/IB/'+name+'/'+name+'_Shortable_')
+            convertCsv('Shortable/IB/Raw/'+file,'Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
 
     os.system('rm -r Shortable/IB/Raw')
 
     with open('record.txt','a+') as f:
-        f.write(f"{datetime.datetime.now()}")
+        f.write(f"{datetime.now()}")
+        f.write('\n')
         f.close()
-
-
-#Shortable\IB\{Country}\{Date}\{Ticker}_{Country}_Shortable_{Date}.csv
-#Shortable\IB\{Country}\{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
