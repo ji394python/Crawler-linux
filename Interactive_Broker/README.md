@@ -1,5 +1,3 @@
-# Crawler-linux
-#python #crawler #ubuntu #intern , Bridge Tech 
 
 ## 一、輸出檔案介紹
 <hr>
