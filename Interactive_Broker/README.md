@@ -6,7 +6,7 @@
 - 舉例：`Shortable\IB\AU\2021-06-12\Base\AU_Shortable_2021-06-12_17-15-03.csv` -> 即為未標準化檔案的路徑
 - 舉例：`Shortable\IB\AU\2021-06-12\Timeseries\BBVA_AU_Shortable_2021-06-12.csv` -> 即為標準化檔案的路徑
 - 名詞解釋：
-    - 未標準化檔案：即根據 <a href="ftp://ftp3.interactivebrokers.com/austria.txt">IB_FTP網址</a> 所爬之原始資料 
+    - 未標準化檔案：即根據 <a href="ftp://ftp3.interactivebrokers.com/austria.txt">IB_FTP網址</a> 所爬之原始資料 (ftp://ftp3.interactivebrokers.com/austria.txt) 
     - 標準化檔案：根據未標準化檔案,針對<b>同一檔股票(Ticker)</b>所整理之時間序列資料
 <pre>
 └Shortable
@@ -19,8 +19,32 @@
                 └ 標準化的檔案.csv
 </pre>
 
+### 2. 輸出檔案結構
+
+- 未標準化檔案：如 `Shortable\IB\AU\2021-06-12\Base\AU_Shortable_2021-06-12_17-15-03.csv`
+
+|  SYM  |  CUR  |        NAME     |  CON        |  ISIN          |   REBATERATE  | FEERATE    | AVAILABLE|
+|:-----:|:-----:|:---------------:|:-----------:|:--------------:|--------------:|-----------:|---------:|
+|  0B2E |  UR   |  BAWAG GROUP AG |  294207034  |  AT0000BAWAG2  |  -1.1247      |  0.6467    |  2600000 |
+|  1COV |  EUR  |  COVESTRO AG    |  208908717  |  DE0006062144  |  -1.0519      |  0.5739    |  3700000 |
+|  1SI  |  EUR  |   SNAP INC - A  |  268862337  |  XXXXXXXA1060  |  -0.8780      |  0.4000    |    17    |
+
+<br>
+
+- 標準化檔案：如 `Shortable\IB\AU\2021-06-12\Timeseries\BBVA_AU_Shortable_2021-06-12.csv` 
+    - 新增兩個主要欄位：Machine Time 、 UnixTime
+    - 表格單位：每檔股票(Ticker)各自的Table
+
+| Machine Time| Unix Time |  SYM  |  CUR  |        NAME     |  CON        |  ISIN          |   REBATERATE  | FEERATE    | AVAILABLE|
+|:-----------:|:---------:|:-----:|:-----:|:---------------:|:-----------:|:--------------:|--------------:|-----------:|---------:|
+|2021/06/12 17:15:03|1623489303.0|1COV|EUR|COVESTRO AG|208908717.0|DE0006062144|-1.0519|0.5739|3700000|
+|2021/06/12 17:30:03|1623482343.0|1COV|EUR|COVESTRO AG|208901111.0|DE0006062144|-1.0719|0.6739|3800000|
+
+<br>
 <hr>
 <hr>
+<br>
+<br>
 <br>
 
 ## 二、程式碼介紹
