@@ -51,9 +51,9 @@ if __name__ == '__main__':
                 if file.find('.') == -1 : continue 
                 temp = pd.read_csv(country+'/'+date+'/Base/'+file)
                 d = file[file.find('Shortable')+10:file.find('.csv')]
-                date = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
-                machine = date.strftime('%Y/%m/%d %H:%M:%S')
-                unix = time.mktime(date.timetuple())
+                dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
+                machine = dateO.strftime('%Y/%m/%d %H:%M:%S')
+                unix = time.mktime(dateO.timetuple())
                 pathD = machine[:10].replace('/','-') #儲存路徑使用
                 for row in temp.iterrows():
                     if row[1]['SYM'] == '#EOF' : 
