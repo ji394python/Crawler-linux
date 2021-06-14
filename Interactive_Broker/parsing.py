@@ -41,7 +41,7 @@ if __name__ == '__main__':
         dateList = os.listdir(country)
         for date in dateList:
             if date.find('.') != -1: continue 
-            if date in storeDate: continue
+            if date in checkDate: continue
             if date == gmt: continue
             storeDate.append(date)
             header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
