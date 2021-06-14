@@ -4,6 +4,7 @@ import csv
 from datetime import datetime,timedelta
 import time 
 from dateutil import tz
+import ETL as etl
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
 def pathControl(path:str):
@@ -30,6 +31,7 @@ def pathControl(path:str):
         
 
 if __name__ == '__main__':
+    start = time.perf_counter_ns()
     basePath = 'Shortable/IB'
     outputHeader = ['Machine Time', 'Unix Time','SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE']
     gmt = str(datetime.now())[:10]
@@ -50,6 +52,7 @@ if __name__ == '__main__':
             for file in fileList:
                 if file.find('.') == -1 : continue 
                 temp = pd.read_csv(country+'/'+date+'/Base/'+file)
+                temp = etl.dataframeUseful(temp).data
                 d = file[file.find('Shortable')+10:file.find('.csv')]
                 dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
                 machine = dateO.strftime('%Y/%m/%d %H:%M:%S')
@@ -72,6 +75,12 @@ if __name__ == '__main__':
     dfCheck = pd.DataFrame({'date':storeDate})
     dfCheck.drop_duplicates('date',inplace=True)
     dfCheck.to_csv('date.csv',index=False)
+    end = time.perf_counter_ns()
+    with open("parsing.txt","w") as f:
+        f.write(f'{datetime.now()}：{(end-start)/10**9}')
+        f.write('/n')
+        f.close()
+
 
                     # for d in dateSet:
                     #     if ((d.replace('/','-') == gmt) | (d.replace('/','-')  in checkDate)): continue
