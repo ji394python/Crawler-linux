@@ -1,10 +1,6 @@
 import numpy as np
 import pandas as pd
-import sys
-import seaborn
 import time 
-import matplotlib.pyplot as plt 
-import matplotlib.patches as patches
 '''
 <-> list_useful 範例：
     x = [i for i in range(10)]

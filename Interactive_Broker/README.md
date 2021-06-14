@@ -60,3 +60,4 @@
 - `parsing.py`：執行剖析未標準化檔案至標準化檔案的主程式檔  (執行頻率：每1分鐘爬取一次)
 - `ftp.py`：FTP的爬蟲的Module,留著待使用
 - `moving.py`：搬運程式的py檔,目前不需用到
+- `ETL.py`：優化處理速度的module
