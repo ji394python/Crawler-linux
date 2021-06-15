@@ -63,14 +63,14 @@ if __name__ == '__main__':
                         break
                     row = list(row[1].values)
                     row.extend([machine,unix])
-                    rowStore.append(row)
-                df = pd.DataFrame(rowStore,columns=header)
-                df.sort_values('Machine Time',inplace=True)
-                tickerSet = set(df['SYM'])
-                for i in tickerSet:
-                    temp_df_ticker = df[df['SYM']==i][outputHeader]
-                    pathControl(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
-                    temp_df_ticker.to_csv(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
+                rowStore.append(row)
+            df = pd.DataFrame(rowStore,columns=header)
+            df.sort_values('Machine Time',inplace=True)
+            tickerSet = set(df['SYM'])
+            for i in tickerSet:
+                temp_df_ticker = df[df['SYM']==i][outputHeader]
+                pathControl(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
+                temp_df_ticker.to_csv(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
 
     dfCheck = pd.DataFrame({'date':storeDate})
     dfCheck.drop_duplicates('date',inplace=True)
