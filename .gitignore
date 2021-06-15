@@ -4,3 +4,6 @@ News
 print
 CB_News_Crawler
 record.txt
+Shortable
+__pycache__
+parsing.txt
