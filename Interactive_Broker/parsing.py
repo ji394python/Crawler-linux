@@ -58,7 +58,7 @@ if __name__ == '__main__':
             rowStore = []
             fileList = os.listdir(country+'/'+date+'/Base')
             for file in fileList:
-                print(country+'/'+date+'/Base/'+file)
+                #print(country+'/'+date+'/Base/'+file)
                 if file.find('.') == -1 : continue 
                 temp = pd.read_csv(country+'/'+date+'/Base/'+file)
                 temp = etl.dataframeUseful(temp).data
@@ -73,7 +73,7 @@ if __name__ == '__main__':
                     row = list(row[1].values)
                     row.extend([machine,unix])
                     rowStore.append(row)
-            print(len(rowStore),header)
+            #print(len(rowStore),header)
             df = pd.DataFrame(rowStore,columns=header)
             df = etl.dataframeUseful(df).data
             df.sort_values('Machine Time',inplace=True)
