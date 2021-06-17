@@ -76,6 +76,8 @@ if __name__ == '__main__':
     for file in ftp.nlst():
         index = file.rfind('.txt')
         if file[index:] == '.txt':
+            
+            if os.path.exists('Shortable/IB/Raw/'+file): continue
 
             downloadFile(ftp,file,'Shortable/IB/Raw/'+file)
             
