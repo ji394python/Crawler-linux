@@ -10,6 +10,7 @@ from dateutil import tz
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
 
 def convertCsv(filePath,outputPath):
+    
     ET = tz.gettz('America/New_York')
     BJ = tz.gettz('Taiwan/Taipel')
     f = open(r'%s' % filePath,'rb+')
@@ -28,6 +29,10 @@ def convertCsv(filePath,outputPath):
     tailPath = outputPath[index+6:]
     fileName = f"{headPath}/{day}/Base/{tailPath}{day}_{time}.csv"
     pathControl(fileName)
+
+    if os.path.exists(fileName):
+        f.close()
+        return("")
 
     file = open(fileName,'w+',encoding='big5',newline='')
     writer = csv.writer(file)
@@ -60,13 +65,18 @@ def pathControl(path:str):
 
     bool = 1 if length[-1].find('.') != -1 else 1
     length = length[:len(length)-bool]
-    temp = length[0]
+    nums = length.count('..')
+    if nums != 0:
+        temp = '/'.join(length[:nums+1])
+        length = length[nums+1:]
+    else:
+        temp = length[0]
+        length = length[1:]
     dirCreate(temp)
 
-    for i in length[1:]:
+    for i in length:
         temp = temp + '/' + i
         dirCreate(temp)
-
 
 if __name__ == '__main__':
     
@@ -76,16 +86,14 @@ if __name__ == '__main__':
     for file in ftp.nlst():
         index = file.rfind('.txt')
         if file[index:] == '.txt':
-            
-            if os.path.exists('Shortable/IB/Raw/'+file): continue
 
-            downloadFile(ftp,file,'Shortable/IB/Raw/'+file)
+            downloadFile(ftp,file,'../../ShareDiskE/Shortable/IB/Raw/'+file)
             
             name = country[file[:-4]]['alpha2']
             
-            convertCsv('Shortable/IB/Raw/'+file,'Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
+            convertCsv('../../ShareDiskE/Shortable/IB/Raw/'+file,'../../ShareDiskE/Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
 
-    os.system('rm -r Shortable/IB/Raw')
+    os.system('rm -r ../../ShareDiskE/Shortable/IB/Raw')
 
     with open('record.txt','a+') as f:
         f.write(f"{datetime.now()}")

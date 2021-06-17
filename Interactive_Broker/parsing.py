@@ -22,17 +22,24 @@ def pathControl(path:str):
 
     bool = 1 if length[-1].find('.') != -1 else 1
     length = length[:len(length)-bool]
-    temp = length[0]
+    nums = length.count('..')
+    if nums != 0:
+        temp = '/'.join(length[:nums+1])
+        length = length[nums+1:]
+    else:
+        temp = length[0]
+        length = length[1:]
     dirCreate(temp)
 
-    for i in length[1:]:
+    for i in length:
         temp = temp + '/' + i
         dirCreate(temp)
+
         
 
 if __name__ == '__main__':
     start = time.perf_counter_ns()
-    basePath = 'Shortable/IB'
+    basePath = '../../ShareDiskE/Shortable/IB'
     outputHeader = ['Machine Time', 'Unix Time','SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE']
     gmt = str(datetime.now())[:10]
     dfCheck = pd.read_csv('date.csv')
@@ -45,7 +52,8 @@ if __name__ == '__main__':
             if date.find('.') != -1: continue 
             if date in checkDate: continue
             if date == gmt: continue
-            storeDate.append(date)
+            if storeDate.count(date) == 0:
+                storeDate.append(date)
             header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
             rowStore = []
             fileList = os.listdir(country+'/'+date+'/Base')
@@ -67,12 +75,13 @@ if __name__ == '__main__':
                     rowStore.append(row)
             print(len(rowStore),header)
             df = pd.DataFrame(rowStore,columns=header)
+            df = etl.dataframeUseful(df).data
             df.sort_values('Machine Time',inplace=True)
             tickerSet = set(df['SYM'])
             for i in tickerSet:
                 temp_df_ticker = df[df['SYM']==i][outputHeader]
-                pathControl(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
-                temp_df_ticker.to_csv(f"Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
+                pathControl(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
+                temp_df_ticker.to_csv(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
 
     dfCheck = pd.DataFrame({'date':storeDate})
     dfCheck.drop_duplicates('date',inplace=True)
