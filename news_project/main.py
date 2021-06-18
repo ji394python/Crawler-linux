@@ -184,7 +184,7 @@ def finding(folder_path:str):
 
 
 #每日
-new_path = 'news_crawler/News'
+new_path = '../../ShareDiskE/Stocks_News/'
 folder_name = os.listdir(new_path)
 
 if not path.exists('../../ShareDiskE/Stocks_News/print/data.csv'):
@@ -194,7 +194,7 @@ if not path.exists('../../ShareDiskE/Stocks_News/print/data.csv'):
 			csvfile.close()
 
 if not path.exists('../../ShareDiskE/Stocks_News/print/done_date.csv'):
-		with open('print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
+		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['date'])
 			csvfile.close()
@@ -203,6 +203,7 @@ name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')
 str_name_done_list = []
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))
+str_name_done_list.append('print')
 
 for DateInNew in folder_name:
 	if (DateInNew in str_name_done_list):
