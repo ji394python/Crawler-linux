@@ -35,11 +35,10 @@ args = parser.parse_args()
 
 dates=pd.date_range(start=args.startDate, end=args.endDate)
 
-
-if os.path.exists('News') == False:
-    os.mkdir('News')
+if os.path.exists('../../ShareDiskE/Stocks_News') == False:
+    os.mkdir('../../ShareDiskE/Stocks_News')
 
 for date_temp in dates:
     date=date_temp.strftime("%Y %m %d")
-    os.system('python3 twse_mops_crawler.py {date} \\News'.format(date=date)) #linux 
-    #os.system('python twse_mops_crawler.py {date} News'.format(date=date)) #windows
+    os.system('python3 twse_mops_crawler.py {date} ../../ShareDiskE/Stocks_News'.format(date=date)) #linux 
+    #os.system('python twse_mops_crawler.py {date} ../../ShareDiskE/Stocks_News'.format(date=date)) #windows

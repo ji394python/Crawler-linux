@@ -12,17 +12,17 @@ from time import gmtime, strftime
 
 def strToFile(file, text):
     print ('Output: ' + file)
-    f = open(file, 'w')
+    f = open(file, 'w',encoding='utf-8-sig')
     f.write(text)
     f.close()
 
 if __name__ == '__main__':
     
-    if os.path.exists('News') == False:
-        os.mkdir('News')
+    if os.path.exists('../../ShareDiskE/Stocks_News') == False:
+        os.mkdir('../../ShareDiskE/Stocks_News')
     
     # 輸入參數
-    output_folder = 'News'
+    output_folder = '../../ShareDiskE/Stocks_News'
     today = strftime("%Y%m%d", gmtime())
     if len(sys.argv) == 2:
         output_folder = sys.argv[1]
