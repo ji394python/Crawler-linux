@@ -18,11 +18,11 @@ def strToFile(file, text):
 
 if __name__ == '__main__':
     
-    if os.path.exists('../../ShareDiskE/Stocks_News') == False:
-        os.mkdir('../../ShareDiskE/Stocks_News')
+    if os.path.exists('../../../ShareDiskE/Stocks_News') == False:
+        os.mkdir('../../../ShareDiskE/Stocks_News')
     
     # 輸入參數
-    output_folder = '../../ShareDiskE/Stocks_News'
+    output_folder = '../../../ShareDiskE/Stocks_News'
     today = strftime("%Y%m%d", gmtime())
     if len(sys.argv) == 2:
         output_folder = sys.argv[1]
