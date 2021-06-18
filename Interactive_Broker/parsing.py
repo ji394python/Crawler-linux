@@ -46,6 +46,7 @@ if __name__ == '__main__':
     checkDate = list(set(dfCheck['date'].values))
     storeDate = checkDate.copy()
     for countryFold in os.listdir(basePath):
+        if countryFold.find('.') != -1: continue
         country = basePath + '/' + countryFold
         dateList = os.listdir(country)
         for date in dateList:
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     dfCheck.drop_duplicates('date',inplace=True)
     dfCheck.to_csv('date.csv',index=False)
     end = time.perf_counter_ns()
-    with open("parsing.txt","w") as f:
+    with open("parsing.txt","a+") as f:
         f.write(f'{datetime.now()}：{(end-start)/10**9}')
         f.write('/n')
         f.close()
