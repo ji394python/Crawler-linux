@@ -43,7 +43,7 @@ def finding(folder_path:str):
 
 	for i in allFileList:
 		#nameoffile = i
-		file = open(folder_path + '/' + i, 'r',encoding='utf-8-sig')
+		file = open(folder_path + '/' + i, 'r',encoding='big5')
 		print(folder_path + '/' + i)
 		words = str(file.read())
 		#nameofstock[0] = 代號, nameofstock[1] = 中文名, nameofstock[2] = 發言時間
