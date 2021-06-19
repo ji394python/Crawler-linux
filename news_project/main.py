@@ -43,7 +43,7 @@ def finding(folder_path:str):
 
 	for i in allFileList:
 		#nameoffile = i
-		file = open(folder_path + '/' + i, 'r',encoding='big5')
+		file = open(folder_path + '/' + i, 'r',encoding='utf-8-sig')
 		print(folder_path + '/' + i)
 		words = str(file.read())
 		#nameofstock[0] = 代號, nameofstock[1] = 中文名, nameofstock[2] = 發言時間
@@ -188,7 +188,7 @@ new_path = '../../ShareDiskE/Stocks_News/'
 folder_name = os.listdir(new_path)
 
 if not path.exists('../../ShareDiskE/Stocks_News/print/data.csv'):
-		with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='big5') as csvfile:
+		with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['0.股票代號', '1.股票名稱', '2.停券起日','3.停券迄日', '4.原因', '5.發言日期', '6.REASON'])
 			csvfile.close()
@@ -199,7 +199,7 @@ if not path.exists('../../ShareDiskE/Stocks_News/print/done_date.csv'):
 			writer.writerow(['date'])
 			csvfile.close()
 
-name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')['date']
+name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')['utf-8-sig']
 str_name_done_list = []
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))

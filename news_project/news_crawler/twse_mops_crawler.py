@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 def strToFile(file, text):
     print ('Output: ' + file)
-    f = open(file, 'w+',encoding='big5')
+    f = open(file, 'w+',encoding='utf-8-sig')
     f.write(text)
     f.close()
 
