@@ -194,12 +194,12 @@ if not path.exists('../../ShareDiskE/Stocks_News/print/data.csv'):
 			csvfile.close()
 
 if not path.exists('../../ShareDiskE/Stocks_News/print/done_date.csv'):
-		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
+		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['date'])
 			csvfile.close()
 
-name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')['utf-8-sig']
+name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')['date']
 str_name_done_list = []
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))
@@ -213,11 +213,11 @@ for DateInNew in folder_name:
 		print(cache)
 		print('-------------')
 		for index in cache:
-			with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='big5') as csvfile:
+			with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 				writer = csv.writer(csvfile)
 				writer.writerow([index[0], index[1], index[2], index[3], index[4], index[5], index[6]])
 			csvfile.close()
-		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='big5') as csvfile:
+		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow([DateInNew])
 		csvfile.close()
