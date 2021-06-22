@@ -32,10 +32,7 @@ max_attempt = 10
 timeout = 6
 
 script_path = os.path.dirname(os.path.abspath('__file__')) # Get parent path
-output_path = os.path.join(script_path, 'output')
-if not os.path.exists(output_path):
-    os.makedirs(output_path)
-news_path = os.path.join(output_path, 'bond_news')
+news_path = '../../ShareDiskE/CB_News'
 if not os.path.exists(news_path):
     os.makedirs(news_path)
 
@@ -79,12 +76,19 @@ def main():
 			data['day1'] = sys.argv[1].split('-')[2]
 			data['day2'] = sys.argv[1].split('-')[2]
 			data['year'] = str(int(sys.argv[1].split('-')[0])-1911)
+			date = sys.argv[1]
 		except:
 			print('Usage:   python convertible_bond_news_daily_scraper.py <year>-<month>-<day>')
 			print('Format:  python convertible_bond_news_daily_scraper.py YYYY-MM-DD')
 			print('Example: python convertible_bond_news_daily_scraper.py 2021-04-12')
 			exit(1) #代表因錯誤而退出
 			#exit(0) #代表正常退出
+	elif len(sys.argv) == 1:
+		data['month'] = today_datetime.month
+		data['day1'] = today_datetime.day
+		data['day2'] = today_datetime.day
+		data['year'] = today_datetime.year - 1911
+		date = today_datetime.strftime('%Y-%m-%d')
 	else:
 		print('Usage:   python convertible_bond_news_daily_scraper.py <year>-<month>-<day>')
 		print('Format:  python convertible_bond_news_daily_scraper.py YYYY-MM-DD')
@@ -133,7 +137,7 @@ def main():
 			continue
 		
 		if index_page: #not amount to zero
-			print('Start crawling news info on %s...' % sys.argv[1])
+			print('Start crawling news info on %s...' % date)
 			soup = BeautifulSoup(index_page, 'html.parser')
 			form1 = soup.find('form', {'name': 'fm'}) #轉(交)換公司債停止轉(交)換公告
 			form2 = soup.find('form', {'name': 'formX'}) #轉換公司債轉換價格變更公告
