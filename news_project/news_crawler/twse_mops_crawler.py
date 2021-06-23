@@ -177,7 +177,8 @@ if __name__ == '__main__':
 
             path = output_folder + '/{}_{}_{}_{}.txt'.format(td_list[2], td_list[3].replace('*', ''), day, time)
 
-        if path.split('_')[2] != dateCheck:
+        pathCheck = path[path.rfind('/')+1:]
+        if pathCheck.split('_')[2] == dateCheck:
             strToFile(path, text)
         else:
             pass
