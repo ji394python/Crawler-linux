@@ -90,7 +90,7 @@ if __name__ == '__main__':
     end = time.perf_counter_ns()
     with open("parsing.txt","a+") as f:
         f.write(f'{datetime.now()}：{(end-start)/10**9}')
-        f.write('/n')
+        f.write('\n')
         f.close()
 
 
