@@ -43,7 +43,8 @@ if __name__ == '__main__':
     s = requests.Session()
 
     # 連線到首頁
-    url = 'https://mops.twse.com.tw/mops/web/t05sr01_1'
+    url = 'https://mops.twse.com.tw/mops/web/t05sr01_1' #及時重大訊息
+    #url = 'https://mops.twse.com.tw/mops/web/t05st02' #歷史訊息
     headers = {
         'Sec-Fetch-Dest': 'document',
         'Sec-Fetch-Mode': 'navigate',

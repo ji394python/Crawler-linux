@@ -6,7 +6,8 @@ import requests
 import sys
 import traceback
 from bs4 import BeautifulSoup
-
+import time as t 
+from datetime import datetime
 def strToFile(file, text):
     print ('Output: ' + file)
     f = open(file, 'w+',encoding='utf-8-sig')
@@ -19,10 +20,11 @@ def strToAppend(file, text):
     f.write(text + '\n')
     f.close()
 
+
 if __name__ == '__main__':
 
     if os.path.exists('../../../ShareDiskE/Stocks_News') == False:
-        os.mkdir('../../../ShareDiskE/Stocks_News')
+        os.makedirs('../../../ShareDiskE/Stocks_News')
     
     # 輸入參數
     if len(sys.argv) < 4:
@@ -33,6 +35,7 @@ if __name__ == '__main__':
     month = sys.argv[2]
     day = sys.argv[3]
     output_folder = '../../../ShareDiskE/Stocks_News'
+    dateCheck = f"{year}{month}{day}"
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]
     output_folder += '/{}{}{}'.format(year, month, day)
@@ -44,7 +47,7 @@ if __name__ == '__main__':
             print('Folder exist: ' + output_folder)
         else:
             print('Create folder: ' + output_folder)
-            os.mkdir(output_folder)
+            os.makedirs(output_folder)
     except OSError:
         print ("Creation of the directory %s failed" % output_folder)
         traceback.print_exc()
@@ -58,7 +61,15 @@ if __name__ == '__main__':
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
     }
+    
     resp = s.get(url, headers = headers, verify = False)
+    connect_count = 0
+    while resp.status_code != 200:
+        t.sleep(5)
+        connect_count += 1
+        resp = s.get(url, headers = headers, verify = False)
+        if connect_count > 10:
+            break
 
     # 輸入日期搜尋新聞
     url = 'https://mops.twse.com.tw/mops/web/ajax_t05st02'
@@ -75,11 +86,18 @@ if __name__ == '__main__':
         'firstin': '1',
         'off': '1',
         'TYPEK': 'all',
-        'year': year,
+        'year': 110,
         'month': month,
         'day': day
     }
     resp = s.post(url, headers = headers, data = data, verify = False)
+    connect_count = 0
+    while resp.status_code != 200:
+        t.sleep(5)
+        connect_count += 1
+        resp = s.post(url, headers = headers, data = data, verify = False)
+        if connect_count > 10:
+            break
     #strToFile('main.html', resp.text.encode('utf8'))
     soup = BeautifulSoup(resp.text.replace('</FONT>', ''), 'html.parser')
     tr_list = soup.find_all('tr', {'class': re.compile('odd|even')})
@@ -138,6 +156,13 @@ if __name__ == '__main__':
             day = '{}{}{}'.format(int(day_array[0])+1911, day_array[1], day_array[2])
             time = td_list[1].replace(':', '')
             resp2 = s.post(url2, headers = headers, data = data2, verify = False)
+            connect_count = 0
+            while resp2.status_code != 200:
+                t.sleep(5)
+                connect_count += 1
+                resp2 = s.post(url2, headers = headers, data = data2, verify = False)
+                if connect_count > 10:
+                    break
             soup2 = BeautifulSoup(resp2.text, 'html.parser')
             tr_list2 = soup2.find_all('tr')
 
@@ -152,7 +177,10 @@ if __name__ == '__main__':
 
             path = output_folder + '/{}_{}_{}_{}.txt'.format(td_list[2], td_list[3].replace('*', ''), day, time)
 
-        strToFile(path, text)
+        if path.split('_')[2] != dateCheck:
+            strToFile(path, text)
+        else:
+            pass
 
     # 關閉連線
     #resp2.close()

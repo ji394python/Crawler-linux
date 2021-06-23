@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 15 04:25:41 2020
-Last Modified：06/04
+Last Modified：06/23
 
 @author: ATM、Denver Liu
 
@@ -12,11 +12,7 @@ import pandas as pd
 from datetime import date
 import argparse
 from argparse import RawTextHelpFormatter
-
-#today = date.today()
-#os.system('python twse_mops_crawler.py {date} G:\News'.format(date=today.strftime("%Y %m %d")))
-
-#
+from datetime import datetime
 
 parser = argparse.ArgumentParser(description=
         '目標：下載公開資訊觀測站-每日重大訊息/歷史重大訊息 \
@@ -26,19 +22,19 @@ parser = argparse.ArgumentParser(description=
         , formatter_class=RawTextHelpFormatter)
 
 parser.add_argument('-st','--start', action='store', dest='startDate', type=str, 
-    help='enter startDate: YYYY/mm/dd', required=True)
+    help='enter startDate: YYYY/mm/dd',default=datetime.now().strftime('%Y/%m/%d'))
 
 parser.add_argument('-et','--end', action='store', dest='endDate', type=str,
-    help='enter endDate: YYYY/mm/d', required=True)
+    help='enter endDate: YYYY/mm/d',default=datetime.now().strftime('%Y/%m/%d'))
 
 args = parser.parse_args()
 
-dates=pd.date_range(start=args.startDate, end=args.endDate)
-
 if os.path.exists('../../../ShareDiskE/Stocks_News') == False:
-    os.mkdir('../../../ShareDiskE/Stocks_News')
+    os.makedirs('../../../ShareDiskE/Stocks_News')
+
+dates=pd.date_range(start=args.startDate, end=args.endDate)
 
 for date_temp in dates:
     date=date_temp.strftime("%Y %m %d")
     os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/Stocks_News'.format(date=date)) #linux 
-    #os.system('python twse_mops_crawler.py {date} ../../ShareDiskE/Stocks_News'.format(date=date)) #windows
+    #os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/Stocks_News'.format(date=date)) #windows

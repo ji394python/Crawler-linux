@@ -53,8 +53,11 @@
 
 ### 2. Py檔功能
 - `news_crawler.py`：執行twse_mops_crawler.py的主程式檔 (手動使用,未加入排程)
-- `twse_mops_crawler.py`：爬取公開資訊觀測站重大訊息公告的主程式檔 (手動使用,可設定時間區間)
-- `twse_mops_today_crawler.py`：綁定當天爬取重大訊息公告的主程式檔 (執行頻率: 1/days)
+- `twse_mops_crawler.py`：爬取公開資訊觀測站重大訊息公告的主程式檔 (執行頻率：1/days)
+  - 爬取網站：https://mops.twse.com.tw/mops/web/t05st02
+
+- `twse_mops_today_crawler.py`：已捨棄此py檔不用,因可直接透過上面的py檔完成
+  - 爬取網站：https://mops.twse.com.tw/mops/web/t05sr01_1
 - `main.py`：剖析重大訊息公告的主程式檔 (執行頻率: 1/days)
 
 <br>
