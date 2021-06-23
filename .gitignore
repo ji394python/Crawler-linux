@@ -2,7 +2,8 @@
 *.csv
 News
 print
-CB_News_Crawler
+output
+template
 record.txt
 Shortable
 __pycache__
