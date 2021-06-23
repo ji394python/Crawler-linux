@@ -12,7 +12,9 @@ import pandas as pd
 from datetime import date
 import argparse
 from argparse import RawTextHelpFormatter
-from datetime import datetime
+from datetime import datetime,timedelta
+
+Date = datetime.now() - timedelta(days=1)
 
 parser = argparse.ArgumentParser(description=
         '目標：下載公開資訊觀測站-每日重大訊息/歷史重大訊息 \
@@ -22,10 +24,10 @@ parser = argparse.ArgumentParser(description=
         , formatter_class=RawTextHelpFormatter)
 
 parser.add_argument('-st','--start', action='store', dest='startDate', type=str, 
-    help='enter startDate: YYYY/mm/dd',default=datetime.now().strftime('%Y/%m/%d'))
+    help='enter startDate: YYYY/mm/dd',default=Date.strftime('%Y/%m/%d'))
 
 parser.add_argument('-et','--end', action='store', dest='endDate', type=str,
-    help='enter endDate: YYYY/mm/d',default=datetime.now().strftime('%Y/%m/%d'))
+    help='enter endDate: YYYY/mm/d',default=Date.strftime('%Y/%m/%d'))
 
 args = parser.parse_args()
 
