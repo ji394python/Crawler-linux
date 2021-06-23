@@ -38,7 +38,10 @@ if not os.path.exists(news_path):
 
 
 # Get source code of the web page
-def getWebpage(url):
+def getWebpage(url:str) -> str:
+	'''
+		斷掉重連的機制函數
+	'''
 	r = requests.post(
 		url=url,
 		allow_redirects=True,

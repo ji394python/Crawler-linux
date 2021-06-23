@@ -1,4 +1,3 @@
-
 ## 一、輸出檔案介紹
 <hr>
 
@@ -59,12 +58,15 @@
 - `parsing.txt`：記錄每天標準化檔案的執行時間 (更新頻率: 1/day)
 
 ### 2. Py檔功能
-- `crawler.py`：執行爬取IB FTP網站的主程式檔  (執行頻率：每日早上七點執行)
-- `parsing.py`：執行剖析未標準化檔案至標準化檔案的主程式檔  (執行頻率：每1分鐘爬取一次)
+- `crawler.py`：執行爬取IB FTP網站的主程式檔  (執行頻率：每1分鐘爬取一次)
+- `parsing.py`：執行剖析未標準化檔案至標準化檔案的主程式檔  (執行頻率：每日早上7點執行)
 - `ftp.py`：FTP的爬蟲的Module,留著待使用
 - `moving.py`：搬運程式的py檔,目前不需用到
 - `ETL.py`：優化處理速度的module
 
+### 3. 執行範例
+- 爬取IB FTP網站：於終端機輸入 `python crawler.py`，即可在路徑 `../../ShareDiskE/Shortable/IB/` 看到爬取之未標準化檔案
+- 標準化檔案：於終端機輸入 `python parsing.py`，即可在路徑  `../../ShareDiskE/Shortable/IB/` 看到標準化檔案
 
 <br>
 <hr>

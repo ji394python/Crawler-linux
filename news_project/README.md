@@ -60,6 +60,16 @@
   - 爬取網站：https://mops.twse.com.tw/mops/web/t05sr01_1
 - `main.py`：剖析重大訊息公告的主程式檔 (執行頻率: 1/days)
 
+### 3. 執行範例
+- 爬取時間區間公告：`python news_crawler.py -st 2021/06/01 -et 2021/06/30`
+  - 即為爬取6/1~6/30號的所有公告
+  - 可於路徑 `../../../ShareDiskE/Stocks_News` 找到爬取檔案
+- 爬取昨日公告：`python news_crawler.py`
+  - 即為爬取昨日公告，預設爬取當天日期-1天的公告
+  - 可於路徑 `../../../ShareDiskE/Stocks_News` 找到爬取檔案
+- 執行剖析檔案：`python main.py`
+  - 可於路徑 `../../../ShareDiskE/Stocks_News/print` 找到剖析檔案
+
 <br>
 <hr>
 
