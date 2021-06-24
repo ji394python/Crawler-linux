@@ -35,7 +35,7 @@ if __name__ == '__main__':
     month = sys.argv[2]
     day = sys.argv[3]
     output_folder = '../../../ShareDiskE/Stocks_News'
-    dateCheck = f"{year}{month}{day}"
+    dateCheck = f"{year}-{month}-{day}"
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]
     output_folder += '/{}{}{}'.format(year, month, day)
@@ -153,7 +153,7 @@ if __name__ == '__main__':
                     data2['co_id'] = onclick_array[5]
 
             day_array = td_list[0].split('/')
-            day = '{}{}{}'.format(int(day_array[0])+1911, day_array[1], day_array[2])
+            day = '{}-{}-{}'.format(int(day_array[0])+1911, day_array[1], day_array[2])
             time = td_list[1].replace(':', '')
             resp2 = s.post(url2, headers = headers, data = data2, verify = False)
             connect_count = 0
