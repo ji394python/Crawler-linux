@@ -207,10 +207,10 @@ def main():
 									text += trs[i].text + '\n'
 
 								# Write transfer news to text file
-								text_path = os.path.join(news_path, tds[2].strftime('%Y%m%d'))
+								text_path = os.path.join(news_path, tds[2].strftime('%Y-%m-%d'))
 								if not os.path.exists(text_path):
 									os.makedirs(text_path)
-								with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y%m%d') + '_' + tds[3] + '.txt'), 'w', encoding='utf_8_sig') as f:
+								with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y-%m-%d') + '_' + tds[3] + '.txt'), 'w', encoding='utf_8_sig') as f:
 									f.write(text)
 								news_count += 1
 							except Exception as e:
@@ -304,10 +304,10 @@ def main():
 									text += trs[i].text + '\n'
 
 								# Write price news to text file
-								text_path = os.path.join(news_path, tds[3].strftime('%Y%m%d'))
+								text_path = os.path.join(news_path, tds[3].strftime('%Y-%m-%d'))
 								if not os.path.exists(text_path):
 									os.makedirs(text_path)
-								with open(os.path.join(text_path, tds[1] + '_' + tds[2] + '_' + tds[3].strftime('%Y%m%d') + '_' + tds[4] + '.txt'), 'w', encoding='utf_8_sig') as f:
+								with open(os.path.join(text_path, tds[1] + '_' + tds[2] + '_' + tds[3].strftime('%Y-%m-%d') + '_' + tds[4] + '.txt'), 'w', encoding='utf_8_sig') as f:
 									f.write(text)
 								news_count += 1
 							except Exception as e:
