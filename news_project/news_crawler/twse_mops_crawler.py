@@ -38,7 +38,7 @@ if __name__ == '__main__':
     dateCheck = f"{year}-{month}-{day}"
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]
-    output_folder += '/{}{}{}'.format(year, month, day)
+    output_folder += '/{}-{}-{}'.format(year, month, day)
     year = str(int(year)-1911)
 
     # 建立輸出資料夾
