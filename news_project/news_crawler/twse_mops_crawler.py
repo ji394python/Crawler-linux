@@ -136,8 +136,8 @@ if __name__ == '__main__':
                     text += field[i] + '：' + input_list[i] + '\n'
                 else:
                     text += field[i] + '：' + '\n' + input_list[i] + '\n'
-
-            path = output_folder + '/{}_{}_{}_{}.txt'.format(input_list[1], input_list[0].replace('*', ''), input_list[2], input_list[3])
+            day = datetime.strptime(input_list[2],'%Y%m%d').strftime('%Y-%m-%d')
+            path = output_folder + '/{}_{}_{}_{}.txt'.format(input_list[1], input_list[0].replace('*', ''), day, input_list[3])
 
         # 處理下方表格
         else:
@@ -178,6 +178,7 @@ if __name__ == '__main__':
             path = output_folder + '/{}_{}_{}_{}.txt'.format(td_list[2], td_list[3].replace('*', ''), day, time)
 
         pathCheck = path[path.rfind('/')+1:]
+        print(path,pathCheck,dateCheck)
         if pathCheck.split('_')[2] == dateCheck:
             strToFile(path, text)
         else:
