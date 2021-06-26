@@ -10,8 +10,8 @@ from datetime import datetime
 import pandas as pd
 from pandas_datareader import data as pdr 
 
-if os.path.exists('../../ShareDiskE/Stocks_News/print') == False:
-	os.mkdir('../../ShareDiskE/Stocks_News/print')
+if os.path.exists('../../ShareDiskE/News_Stocks/print') == False:
+	os.mkdir('../../ShareDiskE/News_Stocks/print')
 
 reason_dict = {
 	'11a': '增資', '11b': '減資', '11c': '其他利益', '14a': '除權', '14b': '除息',
@@ -184,22 +184,22 @@ def finding(folder_path:str):
 
 
 #每日
-new_path = '../../ShareDiskE/Stocks_News/'
+new_path = '../../ShareDiskE/News_Stocks/'
 folder_name = os.listdir(new_path)
 
-if not path.exists('../../ShareDiskE/Stocks_News/print/data.csv'):
-		with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+if not path.exists('../../ShareDiskE/News_Stocks/print/data.csv'):
+		with open('../../ShareDiskE/News_Stocks/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['0.股票代號', '1.股票名稱', '2.停券起日','3.停券迄日', '4.原因', '5.發言日期', '6.REASON'])
 			csvfile.close()
 
-if not path.exists('../../ShareDiskE/Stocks_News/print/done_date.csv'):
-		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+if not path.exists('../../ShareDiskE/News_Stocks/print/done_date.csv'):
+		with open('../../ShareDiskE/News_Stocks/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow(['date'])
 			csvfile.close()
 
-name_done_list = pd.read_csv('../../ShareDiskE/Stocks_News/print/done_date.csv')['date']
+name_done_list = pd.read_csv('../../ShareDiskE/News_Stocks/print/done_date.csv')['date']
 str_name_done_list = []
 for Date in name_done_list:
 	str_name_done_list.append(str(Date))
@@ -213,11 +213,11 @@ for DateInNew in folder_name:
 		print(cache)
 		print('-------------')
 		for index in cache:
-			with open('../../ShareDiskE/Stocks_News/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+			with open('../../ShareDiskE/News_Stocks/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 				writer = csv.writer(csvfile)
 				writer.writerow([index[0], index[1], index[2], index[3], index[4], index[5], index[6]])
 			csvfile.close()
-		with open('../../ShareDiskE/Stocks_News/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+		with open('../../ShareDiskE/News_Stocks/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
 			writer = csv.writer(csvfile)
 			writer.writerow([DateInNew])
 		csvfile.close()

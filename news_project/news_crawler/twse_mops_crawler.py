@@ -23,8 +23,8 @@ def strToAppend(file, text):
 
 if __name__ == '__main__':
 
-    if os.path.exists('../../../ShareDiskE/Stocks_News') == False:
-        os.makedirs('../../../ShareDiskE/Stocks_News')
+    if os.path.exists('../../../ShareDiskE/News_Stocks') == False:
+        os.makedirs('../../../ShareDiskE/News_Stocks')
     
     # 輸入參數
     if len(sys.argv) < 4:
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     year = sys.argv[1]
     month = sys.argv[2]
     day = sys.argv[3]
-    output_folder = '../../../ShareDiskE/Stocks_News'
+    output_folder = '../../../ShareDiskE/News_Stocks'
     dateCheck = f"{year}-{month}-{day}"
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]

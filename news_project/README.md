@@ -2,9 +2,9 @@
 <hr>
 
 ###  1. 輸出目錄結構
-- 舉例：`Stocks_News\{Date}\{Ticker}_{Date}_{Time}.txt` -> 重大訊息公告原始檔路徑
-- 舉例：`Stocks_News\print\data.csv` -> 重大訊息公告剖析結果檔
-- 舉例：`Stocks_News\print\done_date.csv` -> 重大訊息剖析日期紀錄 (更新頻率: 1/days)
+- 舉例：`News_Stocks\{Date}\{Ticker}_{Date}_{Time}.txt` -> 重大訊息公告原始檔路徑
+- 舉例：`News_Stocks\print\data.csv` -> 重大訊息公告剖析結果檔
+- 舉例：`News_Stocks\print\done_date.csv` -> 重大訊息剖析日期紀錄 (更新頻率: 1/days)
 
 <pre>
 └Stock_News
@@ -18,7 +18,7 @@
 
 ### 2. 輸出檔案結構
 
-- 原始檔案：如 `/Stocks_News/20210618/2641_正德_20210618_133714.txt`
+- 原始檔案：如 `/News_Stocks/20210618/2641_正德_20210618_133714.txt`
   - 即爬取到的原始檔
 <pre>
 公司名稱：正德
@@ -29,7 +29,7 @@
 
 <br>
 
-- 剖析檔案：`Stocks_News\print\data.csv` 
+- 剖析檔案：`News_Stocks\print\data.csv` 
   - 使用`utf-8-sig`作為編碼,原因為使用big5在處理網頁原始公告會有問題,故以此為主可避免未來一些衍生狀況
 
 |0.股票代號|1.股票名稱|   2.停券起日   |   3.停券迄日   | 4.原因 |   5.發言日期   | 6.REASON |
@@ -63,12 +63,12 @@
 ### 3. 執行範例
 - 爬取時間區間公告：`python news_crawler.py -st 2021/06/01 -et 2021/06/30`
   - 即為爬取6/1~6/30號的所有公告
-  - 可於路徑 `../../../ShareDiskE/Stocks_News` 找到爬取檔案
+  - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
 - 爬取昨日公告：`python news_crawler.py`
   - 即為爬取昨日公告，預設爬取當天日期-1天的公告
-  - 可於路徑 `../../../ShareDiskE/Stocks_News` 找到爬取檔案
+  - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
 - 執行剖析檔案：`python main.py`
-  - 可於路徑 `../../../ShareDiskE/Stocks_News/print` 找到剖析檔案
+  - 可於路徑 `../../../ShareDiskE/News_Stocks/print` 找到剖析檔案
 
 <br>
 <hr>

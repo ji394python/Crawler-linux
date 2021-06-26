@@ -13,6 +13,7 @@ from datetime import date
 import argparse
 from argparse import RawTextHelpFormatter
 from datetime import datetime,timedelta
+from time import sleep
 
 Date = datetime.now() - timedelta(days=1)
 
@@ -31,12 +32,13 @@ parser.add_argument('-et','--end', action='store', dest='endDate', type=str,
 
 args = parser.parse_args()
 
-if os.path.exists('../../../ShareDiskE/Stocks_News') == False:
-    os.makedirs('../../../ShareDiskE/Stocks_News')
+if os.path.exists('../../../ShareDiskE/News_Stocks') == False:
+    os.makedirs('../../../ShareDiskE/News_Stocks')
 
 dates=pd.date_range(start=args.startDate, end=args.endDate)
 
 for date_temp in dates:
     date=date_temp.strftime("%Y %m %d")
-    os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/Stocks_News'.format(date=date)) #linux 
-    #os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/Stocks_News'.format(date=date)) #windows
+    #os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #linux 
+    os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #windows
+    sleep(5)
