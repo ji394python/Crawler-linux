@@ -86,7 +86,7 @@ if __name__ == '__main__':
         'firstin': '1',
         'off': '1',
         'TYPEK': 'all',
-        'year': 110,
+        'year': year,
         'month': month,
         'day': day
     }
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     #strToFile('main.html', resp.text.encode('utf8'))
     soup = BeautifulSoup(resp.text.replace('</FONT>', ''), 'html.parser')
     tr_list = soup.find_all('tr', {'class': re.compile('odd|even')})
-    print ('# of news: {}'.format(len(tr_list)))
+    print ('# of news: {}'.format(len(tr_list))) #有幾則新聞
 
     # 上方表格標題
     field = ['公司名稱', '公司代號', '發言日期', '發言時間', '主旨', '序號', '符合條款', '事實發生日', '說明']
