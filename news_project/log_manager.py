@@ -1,17 +1,18 @@
-#Log Script，如何在Process中使用請看下例
 '''
 import traceback
 from log_manager import *
 try:
     do your thing
-    model_log(__file__,'Success')
+    processLog(__file__,'Success')
 except Exception as err:
     traceback.print_exc()
-    model_log(__file__,'Fail,and fail on :\n%s' % traceback.format_exc())
+    errorLog(__file__,'Fail,and fail on :\n%s' % traceback.format_exc())
 '''
+
 #Author : Denver Liu
 import os
 import time
+
 def errorLog(exe_status:str):
     #log_path為路徑，判斷是否有，若無會自動創建資夾
     log_path= 'log'
@@ -29,11 +30,9 @@ def errorLog(exe_status:str):
         log_file = open(f'log/ERROR.log',mode='a+',encoding='utf-8')
         log_file.write(record_time+"："+str(exe_status)+'\n')
 
-'''
-model_log(__file__,'Process start')
-'''
-#Author : Tom Liu
+#Author : Denver Liu
 def processLog(exe_string:str):
+
     #log_path為路徑，判斷是否有，若無會自動創建資夾
     log_path= 'log'
     if not os.path.exists(log_path):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 15 04:25:41 2020
-Last Modified：06/23
+Last Modified：07/08
 
 @author: ATM、Denver Liu
 
@@ -39,6 +39,6 @@ dates=pd.date_range(start=args.startDate, end=args.endDate)
 
 for date_temp in dates:
     date=date_temp.strftime("%Y %m %d")
-    #os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #linux 
-    os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #windows
+    os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #linux 
+    #os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #windows
     sleep(0.8)

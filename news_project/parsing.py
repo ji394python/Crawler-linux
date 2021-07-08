@@ -2,7 +2,7 @@
 """
 Author: Denver Liu
 
-Last Updated: 2021/07/01
+Last Updated: 2021/07/08
 
 """
 import log_manager as log
@@ -195,11 +195,11 @@ if __name__ == '__main__':
 
 		log.processLog('讀取先驗資料檔: 股票代號、假日資訊')
 		#讀取股票代號:https://www.twse.com.tw/zh/page/products/stock-code2.html
-		stockNameList = pd.read_csv('stock_index_confirm.csv')['name'].values.tolist() 
+		stockNameList = pd.read_csv('predata/stock_index_confirm.csv')['name'].values.tolist() 
 
 		#讀取台灣例假日資訊:https://www.twse.com.tw/zh/holidaySchedule/holidaySchedule
-		holidayList = pd.read_csv('holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
-		workdayList = pd.read_csv('workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
+		holidayList = pd.read_csv('predata/holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
+		workdayList = pd.read_csv('predata/workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
 
 		#每日
 		new_path = '../../ShareDiskE/News_Stocks/'

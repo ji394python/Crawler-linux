@@ -1,13 +1,21 @@
-from numpy.core.defchararray import index
+# -*- coding: utf-8 -*-
+"""
+Author: Denver Liu
+
+Last Updated: 2021/07/08
+
+用來對答案用 (程式運行用不到)
+
+"""
 import pandas as pd
 from datetime import datetime
 import time
 
-holidayList = pd.read_csv('holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
-workdayList = pd.read_csv('workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
+holidayList = pd.read_csv('predata/holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
+workdayList = pd.read_csv('predata/workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
 
-df_up = pd.read_csv('上市.csv',encoding='cp950')
-df_stock = pd.read_csv('上櫃.csv',encoding='cp950')
+df_up = pd.read_csv('資料/上市.csv',encoding='cp950')
+df_stock = pd.read_csv('資料/上櫃.csv',encoding='cp950')
 
 df_up.columns = ['股票代號','股票名稱','停券起日','停券迄日','原因']
 df_up.fillna(0,inplace=True)
