@@ -100,12 +100,16 @@
 - 需手動更新資料相關：
   - 假日更新：<a href="https://www.twse.com.tw/zh/holidaySchedule/holidaySchedule">證交所-市場開休日查詢</a>
   - 股票編碼：<a href="https://www.twse.com.tw/zh/page/products/stock-code2.html">證交所-證券編碼公告</a>
+
 <br>
+
 - 停券預告相關
   - 新聞公告：<a href="https://mops.twse.com.tw/mops/web/t05st01">公開資訊觀測站-歷史重大訊息</a>
   - 停券預告1：<a href="https://www.twse.com.tw/zh/page/trading/exchange/BFI84U2.html">證交所-停券預告表</a>
   - 停券預告2：<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心-停券預告表</a>
+
 <br>
+
 - 法規相關
   - 重大訊息歸類：<a href="http://www.selaw.com.tw/LawContent.aspx?LawID=G0100104&Hit=1">臺灣證券交易所股份有限公司對有價證券上市公司重大訊息之查證暨公開處理程序</a>
   - 停券預告縮短：<a href="https://www.twse.com.tw/ch/products/publication/download/0001001837.pdf">取消停止過戶前停資規定
