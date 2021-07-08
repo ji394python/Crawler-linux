@@ -22,9 +22,8 @@ if __name__ == '__main__':
 
         file = '../../ShareDiskE/News_Stocks/print/data.csv'
         df = pd.read_csv(file,encoding='utf-8-sig')
-        df.drop_duplicates(['0.股票代號', '1.股票名稱',
-                            '2.停券起日', '3.停券迄日',
-                            '5.發言日期'],inplace=True,keep='last')
+        df.drop_duplicates(['股票代號', '股票名稱',
+                            '停券起日', '停券迄日'],inplace=True,keep='last')
         df.to_csv('../../ShareDiskE/News_Stocks/print/data.csv',encoding='utf-8-sig',index=False)
         
         end = time.perf_counter_ns() 
@@ -35,5 +34,5 @@ if __name__ == '__main__':
     except Exception as e:
 
         log.processLog('發生錯誤:請查看error.log')
-        print(traceback.print_exc())
+        traceback.print_exc()
         log.errorLog(traceback.format_exc())

@@ -2,7 +2,7 @@
 #!/bin/bash
 
 cd news_crawler
-python news_crawler.py -st 2020/02/20 -et 2021/06/27
+python3 news_crawler.py -st 2020/07/07 -et 2021/07/07
 cd ..
-python parsing.py
-python transform.py
+python3 parsing.py
+python3 transform.py
