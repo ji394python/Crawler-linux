@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
 	#路徑設定 (需要手動改的地方)
 	#只要決定"根路徑"即可
-    output_dir_path = r'C:\Users\chiaming\Documents\GitHub\ShareDiskE\不需要'
+    output_dir_path = r'../../ShareDiskE'
 
 	#路徑設定 (不用更動的地方)
     output_dir_path_News = os.path.join(output_dir_path,'News_Stocks')

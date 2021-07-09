@@ -37,7 +37,7 @@ if __name__ == '__main__':
     
     #路徑設定 (需手動更新的地方)
     #只要決定"根路徑"即可
-    output_dir_path = r'C:\Users\chiaming\Documents\GitHub\ShareDiskE\不需要' 
+    output_dir_path = r'../../../ShareDiskE' 
     
     #路徑設定 (不用更動這裡)
     output_dir_path = os.path.join(output_dir_path,'News_Stocks')
@@ -49,6 +49,6 @@ if __name__ == '__main__':
 
     for date_temp in dates:
         date=date_temp.strftime("%Y %m %d")
-        #os.system('python3 twse_mops_crawler.py {date} {path}}'.format(date=date,path=output_dir_path)) #linux 
-        os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        os.system('python3 twse_mops_crawler.py {date} {path}}'.format(date=date,path=output_dir_path)) #linux 
+        #os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
         sleep(0.8)
