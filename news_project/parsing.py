@@ -178,12 +178,24 @@ def finding(folderPath:str) -> list:
 
 if __name__ == '__main__':
 
+	#路徑設定 (需要手動改的地方)
+	#只要決定"根路徑"即可
+	output_dir_path = r'C:\Users\chiaming\Documents\GitHub\ShareDiskE\不需要'
+
+	#路徑設定 (不用更動的地方)
+	output_dir_path_News = os.path.join(output_dir_path,'News_Stocks')
+	output_dir_path_print = os.path.join(output_dir_path,'News_Stocks','print')
+	output_file_path_dataCsv = os.path.join(output_dir_path,'News_Stocks','print','data.csv')
+	output_file_path_doneDate = os.path.join(output_dir_path,'News_Stocks','print','done_date.csv')
+	
+
+
 	log.processLog('【開始執行News_Stocks爬蟲專案】 parsing.py')
 	start = time.perf_counter_ns()
 	try:
-		if os.path.exists('../../ShareDiskE/News_Stocks/print') == False:
-			os.mkdir('../../ShareDiskE/News_Stocks/print')
-			log.processLog('建立資料夾： "../../ShareDiskE/News_Stocks/print" ')
+		if os.path.exists(output_dir_path_print) == False:
+			os.mkdir(output_dir_path_print)
+			log.processLog(f'建立資料夾： "{output_dir_path_print}" ')
 
 		#理由的條款可參考此http://www.selaw.com.tw/LawContent.aspx?LawID=G0100104&Hit=1
 		reasonDict = {
@@ -202,41 +214,40 @@ if __name__ == '__main__':
 		workdayList = pd.read_csv('predata/workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
 
 		#每日
-		new_path = '../../ShareDiskE/News_Stocks/'
-		folderName = os.listdir(new_path)
+		folderName = os.listdir(output_dir_path_News)
 
-		if not path.exists('../../ShareDiskE/News_Stocks/print/data.csv'):
+		if not path.exists(output_file_path_dataCsv):
 			log.processLog('建立整合資料檔: data.csv')
-			with open('../../ShareDiskE/News_Stocks/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+			with open(output_file_path_dataCsv, 'a', newline='',encoding='utf-8-sig') as csvfile:
 				writer = csv.writer(csvfile)
 				writer.writerow(['股票代號', '股票名稱', '停券起日','停券迄日', '原因', '發言日期', 'REASON','主旨'])
 				csvfile.close()
 
-		if not path.exists('../../ShareDiskE/News_Stocks/print/done_date.csv'):
+		if not path.exists(output_file_path_doneDate):
 			log.processLog('建立日期紀錄檔: done_date.csv')
-			with open('../../ShareDiskE/News_Stocks/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+			with open(output_file_path_doneDate, 'a', newline='',encoding='utf-8-sig') as csvfile:
 				writer = csv.writer(csvfile)
 				writer.writerow(['date'])
 				csvfile.close()
 
 		#讀取已剖析過的日期紀錄檔
 		log.processLog('讀取日期資料檔: done_date.csv')
-		completeDate = pd.read_csv('../../ShareDiskE/News_Stocks/print/done_date.csv')['date'].values.tolist()
+		completeDate = pd.read_csv(output_file_path_doneDate)['date'].values.tolist()
 		completeDate.append('print')
 		completeDate.append('log')
 
 		for DateInNew in folderName:
 			if (DateInNew not in completeDate):
 				log.processLog(f'開始剖析 {DateInNew} 之公告')
-				cache = finding(new_path + '/' + DateInNew)
+				cache = finding(output_dir_path_News + '/' + DateInNew)
 				#print(cache)
 				print('-------------')
 				for index in cache:
-					with open('../../ShareDiskE/News_Stocks/print/data.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+					with open(output_file_path_dataCsv, 'a', newline='',encoding='utf-8-sig') as csvfile:
 						writer = csv.writer(csvfile)
 						writer.writerow([index[0], index[1], index[2], index[3], index[4], index[5], index[6],index[7]])
 					csvfile.close()
-				with open('../../ShareDiskE/News_Stocks/print/done_date.csv', 'a', newline='',encoding='utf-8-sig') as csvfile:
+				with open(output_file_path_doneDate, 'a', newline='',encoding='utf-8-sig') as csvfile:
 					writer = csv.writer(csvfile)
 					writer.writerow([DateInNew])
 				csvfile.close()

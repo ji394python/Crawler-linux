@@ -32,13 +32,23 @@ parser.add_argument('-et','--end', action='store', dest='endDate', type=str,
 
 args = parser.parse_args()
 
-if os.path.exists('../../../ShareDiskE/News_Stocks') == False:
-    os.makedirs('../../../ShareDiskE/News_Stocks')
 
-dates=pd.date_range(start=args.startDate, end=args.endDate)
+if __name__ == '__main__':
+    
+    #路徑設定 (需手動更新的地方)
+    #只要決定"根路徑"即可
+    output_dir_path = r'C:\Users\chiaming\Documents\GitHub\ShareDiskE\不需要' 
+    
+    #路徑設定 (不用更動這裡)
+    output_dir_path = os.path.join(output_dir_path,'News_Stocks')
 
-for date_temp in dates:
-    date=date_temp.strftime("%Y %m %d")
-    os.system('python3 twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #linux 
-    #os.system('python twse_mops_crawler.py {date} ../../../ShareDiskE/News_Stocks'.format(date=date)) #windows
-    sleep(0.8)
+    if os.path.exists(output_dir_path) == False:
+        os.makedirs(output_dir_path)
+
+    dates=pd.date_range(start=args.startDate, end=args.endDate)
+
+    for date_temp in dates:
+        date=date_temp.strftime("%Y %m %d")
+        #os.system('python3 twse_mops_crawler.py {date} {path}}'.format(date=date,path=output_dir_path)) #linux 
+        os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        sleep(0.8)
