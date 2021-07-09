@@ -49,6 +49,6 @@ if __name__ == '__main__':
 
     for date_temp in dates:
         date=date_temp.strftime("%Y %m %d")
-        os.system('python3 twse_mops_crawler.py {date} {path}}'.format(date=date,path=output_dir_path)) #linux 
+        os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
         #os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
         sleep(0.8)

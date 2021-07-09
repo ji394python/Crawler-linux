@@ -1,4 +1,22 @@
-## 一、輸出檔案介紹
+## 一、如何執行
+<hr>
+
+### 1. 執行流程
+- Step1：執行 `python news_crawler.py` 爬取昨日新聞
+- Step2：執行 `python parsing.py` 剖析新聞
+- Step3：執行 `python transform.py` 對剖析檔做ETL
+- Step4：資料預計輸出於 `../../ShareDiskE/News_Stocks/`
+  - 沒有該資料夾的話會自己創建,不須擔心路徑缺失
+  - 若要更改輸出資料夾的話可以聯絡我,只需要改一行，但用打的不好說明邏輯
+
+<br>
+<hr>
+<hr>
+<br>
+<br>
+<br>
+
+## 二、輸出檔案介紹
 <hr>
 
 ###  1. 輸出目錄結構
@@ -44,7 +62,7 @@
 <br>
 <br>
 
-## 二、程式碼介紹
+## 三、程式碼介紹
 <hr>
 
 ### 1. 前置資料檔
@@ -62,15 +80,27 @@
 - `log_manager.py`：程式進程紀錄使用,輸出資料夾(log)置於VM上不納入E槽
 - `main.sh`：Shell Scripts,手動使用,未加入排程
 
-### 3. 執行範例
+### 3.各檔案執行範例
+
 - 爬取時間區間公告：`python news_crawler.py -st 2021/06/01 -et 2021/06/30`
   - 即為爬取6/1~6/30號的所有公告
   - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
+
+
 - 爬取昨日公告：`python news_crawler.py`
   - 即為爬取昨日公告，預設爬取當天日期-1天的公告
   - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
+
+<br>
+
 - 執行剖析檔案：`python parsing.py`
-  - 可於路徑 `../../../ShareDiskE/News_Stocks/print` 找到剖析檔案
+  - 可於路徑 `../../../ShareDiskE/News_Stocks/print/data.csv` 找到剖析檔案
+
+<br>
+
+- 執行ETL檔案：`python transform.py`
+  - 可於路徑 `../../../ShareDiskE/News_Stocks/print/data.csv` 找到剖析檔案
+
 
 <br>
 <hr>
@@ -79,7 +109,7 @@
 <br>
 <br>
 
-## 三、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
+## 四、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
 <hr>
 
 ### 1. 已驗證過六年上市櫃資料
