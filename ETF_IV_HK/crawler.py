@@ -100,6 +100,7 @@ if __name__ == '__main__':
             date=date_temp.strftime("%Y-%m-%d")
             week = datetime.weekday(date_temp)
             if week in [5,6]:
+                log.processLog(f'【程序中止】 周末無資料_{date}，不需爬蟲')
                 break
 
             if not os.path.exists(output_dir_path + date):
