@@ -41,7 +41,10 @@ if not os.path.exists(summary_path):
     os.makedirs(summary_path)
 
 # Get source code of the web page
-def getWebpage(url):
+def getWebpage(url:str) -> str:
+	'''
+		斷掉重連的機制函數
+	'''
 	r = requests.post(
 		url=url,
 		allow_redirects=True,
@@ -57,7 +60,10 @@ def getWebpage(url):
 
 # Convert year format to A.D.
 # Input type: YYY/MM/DD
-def transferDate(dateString):
+def transferDate(dateString:str) -> datetime.timetuple:
+	'''
+		<Ex.> 97/06/13 -> 2008
+	'''
 	try:
 		dateList = [int(num) for num in dateString.split('/')]
 		dateList[0] += 1911
