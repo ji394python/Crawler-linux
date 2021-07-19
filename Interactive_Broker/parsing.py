@@ -39,65 +39,71 @@ def pathControl(path:str):
         
 
 if __name__ == '__main__':
-    start = time.perf_counter_ns()
-    basePath = '../../ShareDiskE/Shortable/IB'
-    outputHeader = ['Machine Time', 'Unix Time','SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE']
-    gmt = str(datetime.now())[:10]
-    dfCheck = pd.read_csv('date.csv')
-    checkDate = list(set(dfCheck['date'].values))
-    storeDate = checkDate.copy()
-    for countryFold in os.listdir(basePath):
-        if countryFold.find('.') != -1: continue
-        country = basePath + '/' + countryFold
-        dateList = os.listdir(country)
-        for date in dateList:
-            if date.find('.') != -1: continue 
-            if date in checkDate: continue
-            if date == gmt: continue
-            if storeDate.count(date) == 0:
-                storeDate.append(date)
-            header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
-            rowStore = []
-            fileList = os.listdir(country+'/'+date+'/Base')
-            for file in fileList:
-                print(country+'/'+date+'/Base/'+file)
-                if file.find('.') == -1 : continue 
-                try:
-                    temp = pd.read_csv(country+'/'+date+'/Base/'+file)
-                except pd.errors.EmptyDataError:
-                    print(f"檔案為空：{country}/{date}/Base/{file}")
-                except:
-                    traceback.print_exc()
-                temp = etl.dataframeUseful(temp).data
-                d = file[file.find('Shortable')+10:file.find('.csv')]
-                dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
-                machine = dateO.strftime('%Y/%m/%d %H:%M:%S')
-                unix = time.mktime(dateO.timetuple())
-                pathD = machine[:10].replace('/','-') #儲存路徑使用
-                for row in temp.iterrows():
-                    if row[1]['SYM'] == '#EOF' : 
-                        break
-                    row = list(row[1].values)
-                    row.extend([machine,unix])
-                    rowStore.append(row)
-            #print(len(rowStore),header)
-            df = pd.DataFrame(rowStore,columns=header)
-            df = etl.dataframeUseful(df).data
-            df.sort_values('Machine Time',inplace=True)
-            tickerSet = set(df['SYM'])
-            for i in tickerSet:
-                temp_df_ticker = df[df['SYM']==i][outputHeader]
-                pathControl(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
-                temp_df_ticker.to_csv(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
+    try:
+        start = time.perf_counter_ns()
+        basePath = '../../ShareDiskE/Shortable/IB'
+        outputHeader = ['Machine Time', 'Unix Time','SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE']
+        gmt = str(datetime.now())[:10]
+        dfCheck = pd.read_csv('date.csv')
+        checkDate = list(set(dfCheck['date'].values))
+        storeDate = checkDate.copy()
+        for countryFold in os.listdir(basePath):
+            if countryFold.find('.') != -1: continue
+            country = basePath + '/' + countryFold
+            dateList = os.listdir(country)
+            for date in dateList:
+                if date.find('.') != -1: continue 
+                if date in checkDate: continue
+                if date == gmt: continue
+                if storeDate.count(date) == 0:
+                    storeDate.append(date)
+                header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
+                rowStore = []
+                fileList = os.listdir(country+'/'+date+'/Base')
+                for file in fileList:
+                    print(country+'/'+date+'/Base/'+file)
+                    if file.find('.') == -1 : continue 
+                    try:
+                        temp = pd.read_csv(country+'/'+date+'/Base/'+file)
+                    except pd.errors.EmptyDataError:
+                        print(f"檔案為空：{country}/{date}/Base/{file}")
+                    except:
+                        traceback.print_exc()
+                    temp = etl.dataframeUseful(temp).data
+                    d = file[file.find('Shortable')+10:file.find('.csv')]
+                    dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
+                    machine = dateO.strftime('%Y/%m/%d %H:%M:%S')
+                    unix = time.mktime(dateO.timetuple())
+                    pathD = machine[:10].replace('/','-') #儲存路徑使用
+                    for row in temp.iterrows():
+                        if row[1]['SYM'] == '#EOF' : 
+                            break
+                        row = list(row[1].values)
+                        row.extend([machine,unix])
+                        rowStore.append(row)
+                #print(len(rowStore),header)
+                df = pd.DataFrame(rowStore,columns=header)
+                df = etl.dataframeUseful(df).data
+                df.sort_values('Machine Time',inplace=True)
+                tickerSet = set(df['SYM'])
+                for i in tickerSet:
+                    temp_df_ticker = df[df['SYM']==i][outputHeader]
+                    pathControl(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
+                    temp_df_ticker.to_csv(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
 
-    dfCheck = pd.DataFrame({'date':storeDate})
-    dfCheck.drop_duplicates('date',inplace=True)
-    dfCheck.to_csv('date.csv',index=False)
-    end = time.perf_counter_ns()
-    with open("parsing.txt","a+") as f:
-        f.write(f'{datetime.now()}：{(end-start)/10**9}')
-        f.write('\n')
-        f.close()
+        dfCheck = pd.DataFrame({'date':storeDate})
+        dfCheck.drop_duplicates('date',inplace=True)
+        dfCheck.to_csv('date.csv',index=False)
+        end = time.perf_counter_ns()
+        with open("parsing.txt","a+") as f:
+            f.write(f'{datetime.now()}：{(end-start)/10**9}')
+            f.write('\n')
+            f.close()
+    except:
+        with open('錯誤訊息','w+') as f:
+            f.write(traceback.format_exc())
+            f.close()
+        
 
 
                     # for d in dateSet:
