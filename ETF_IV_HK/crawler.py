@@ -69,7 +69,7 @@ if __name__ == '__main__':
     #     print(text.text.strip())
 
     #路徑設定
-    output_dir_path =  '../../ShareDiskE/ETF_IV/HK/'
+    output_dir_path =  '../../ShareDiskE/ETF_NAV/HK/'
 
     Date = datetime.now() - timedelta(days=1)
 
@@ -101,7 +101,7 @@ if __name__ == '__main__':
             week = datetime.weekday(date_temp)
             if week in [5,6]:
                 log.processLog(f'【程序中止】 周末無資料_{date}，不需爬蟲')
-                break
+                continue
 
             if not os.path.exists(output_dir_path + date):
                 log.processLog(f'建立資料夾：{output_dir_path + date}')
@@ -191,7 +191,7 @@ if __name__ == '__main__':
                             else:
                                 if col == 'STOCK_CODE':
                                     code = re.findall(f'{col}:(.*?),',resultText_clean)[0].replace('、','_')
-                                    log.processLog(f'===== 處理檔案_[{i}]： {code} ')
+                                    log.processLog(f'===== 處理檔案_[{int(i/2)}]： {code} ')
                                 # print(i,re.findall(f'{i}:(.*?),',resultText_clean))
 
                         urlFileHead = 'https://www1.hkexnews.hk'
