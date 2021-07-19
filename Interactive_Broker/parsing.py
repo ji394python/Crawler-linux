@@ -5,6 +5,7 @@ from datetime import datetime,timedelta
 import time 
 from dateutil import tz
 import ETL as etl
+import traceback
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
 def pathControl(path:str):
@@ -61,7 +62,12 @@ if __name__ == '__main__':
             for file in fileList:
                 print(country+'/'+date+'/Base/'+file)
                 if file.find('.') == -1 : continue 
-                temp = pd.read_csv(country+'/'+date+'/Base/'+file)
+                try:
+                    temp = pd.read_csv(country+'/'+date+'/Base/'+file)
+                except pd.errors.EmptyDataError:
+                    print(f"檔案為空：{country}/{date}/Base/{file}")
+                except:
+                    traceback.print_exc()
                 temp = etl.dataframeUseful(temp).data
                 d = file[file.find('Shortable')+10:file.find('.csv')]
                 dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
