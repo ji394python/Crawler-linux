@@ -15,7 +15,8 @@ from argparse import RawTextHelpFormatter
 from datetime import datetime,timedelta
 from time import sleep
 
-Date = datetime.now() - timedelta(days=1)
+end = datetime.now() - timedelta(days=1)
+start = datetime.now() - timedelta(days=30)
 
 parser = argparse.ArgumentParser(description=
         '目標：下載公開資訊觀測站-每日重大訊息/歷史重大訊息 \
@@ -25,16 +26,15 @@ parser = argparse.ArgumentParser(description=
         , formatter_class=RawTextHelpFormatter)
 
 parser.add_argument('-st','--start', action='store', dest='startDate', type=str, 
-    help='enter startDate: YYYY/mm/dd',default=Date.strftime('%Y/%m/%d'))
+    help='enter startDate: YYYY/mm/dd',default=start.strftime('%Y/%m/%d'))
 
 parser.add_argument('-et','--end', action='store', dest='endDate', type=str,
-    help='enter endDate: YYYY/mm/d',default=Date.strftime('%Y/%m/%d'))
+    help='enter endDate: YYYY/mm/d',default=end.strftime('%Y/%m/%d'))
 
 args = parser.parse_args()
 
 
 if __name__ == '__main__':
-    
     #路徑設定 (需手動更新的地方)
     #只要決定"根路徑"即可
     output_dir_path = r'../../../ShareDiskE' 
@@ -49,6 +49,6 @@ if __name__ == '__main__':
 
     for date_temp in dates:
         date=date_temp.strftime("%Y %m %d")
-        os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
-        #os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        #os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
+        os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
         sleep(0.8)

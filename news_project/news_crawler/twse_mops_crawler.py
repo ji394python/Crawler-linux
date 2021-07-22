@@ -8,8 +8,14 @@ import traceback
 from bs4 import BeautifulSoup
 import time as t 
 from datetime import datetime
+import sys
+sys.path.append(r'..')
+import log_manager as log
+
+
 def strToFile(file, text):
     print ('Output: ' + file)
+    log.processLog('Output：'+file)
     f = open(file, 'w+',encoding='utf-8-sig')
     f.write(text)
     f.close()
@@ -50,6 +56,7 @@ if __name__ == '__main__':
             os.makedirs(output_folder)
     except OSError:
         print ("Creation of the directory %s failed" % output_folder)
+        log.processLog("Creation of the directory %s failed" % output_folder)
         traceback.print_exc()
         exit(1)
 
@@ -101,7 +108,8 @@ if __name__ == '__main__':
     #strToFile('main.html', resp.text.encode('utf8'))
     soup = BeautifulSoup(resp.text.replace('</FONT>', ''), 'html.parser')
     tr_list = soup.find_all('tr', {'class': re.compile('odd|even')})
-    print ('# of news: {}'.format(len(tr_list))) #有幾則新聞
+    print('# of news: {}'.format(len(tr_list))) #有幾則新聞
+    log.processLog('# of news: {}'.format(len(tr_list)))
 
     # 上方表格標題
     field = ['公司名稱', '公司代號', '發言日期', '發言時間', '主旨', '序號', '符合條款', '事實發生日', '說明']
@@ -183,6 +191,11 @@ if __name__ == '__main__':
             strToFile(path, text)
         else:
             pass
+    
+    log.processLog("==============================================================")
+    log.processLog("==============================================================")
+    log.processLog("==============================================================")
+    log.processLog("==============================================================")
 
     # 關閉連線
     #resp2.close()
