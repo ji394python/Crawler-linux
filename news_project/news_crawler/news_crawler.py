@@ -14,6 +14,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 from datetime import datetime,timedelta
 from time import sleep
+import json
 
 end = datetime.now() - timedelta(days=1)
 start = datetime.now() - timedelta(days=30)
@@ -35,9 +36,11 @@ args = parser.parse_args()
 
 
 if __name__ == '__main__':
+
     #路徑設定 (需手動更新的地方)
     #只要決定"根路徑"即可
-    output_dir_path = r'../../../ShareDiskE' 
+    output_dir_path_dict = json.load(open(r'../set.json','r+'))
+    output_dir_path = '../' + output_dir_path_dict['output_dir_path']
     
     #路徑設定 (不用更動這裡)
     output_dir_path = os.path.join(output_dir_path,'News_Stocks')
@@ -49,6 +52,6 @@ if __name__ == '__main__':
 
     for date_temp in dates:
         date=date_temp.strftime("%Y %m %d")
-        #os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
-        os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
+        #os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
         sleep(0.8)

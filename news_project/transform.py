@@ -10,12 +10,14 @@ import log_manager as log
 import time
 import traceback
 import os 
+import json
 
 if __name__ == '__main__':
 
-	#路徑設定 (需要手動改的地方)
-	#只要決定"根路徑"即可
-    output_dir_path = r'../../ShareDiskE'
+    #路徑設定 (需手動更新的地方)
+    #只要決定"根路徑"即可
+    output_dir_path_dict = json.load(open(r'set.json','r+'))
+    output_dir_path = output_dir_path_dict['output_dir_path']
 
 	#路徑設定 (不用更動的地方)
     output_dir_path_News = os.path.join(output_dir_path,'News_Stocks')
@@ -25,7 +27,7 @@ if __name__ == '__main__':
 
 
     #專為資料處理用的py檔，可延伸
-    log.processLog('【開始執行News_Stocks爬蟲專案】 clean.py')
+    log.processLog('【開始執行News_Stocks爬蟲專案】 transform.py')
 
     try:
         

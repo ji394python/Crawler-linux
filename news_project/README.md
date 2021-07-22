@@ -2,10 +2,11 @@
 <hr>
 
 ### 1. 執行流程
-- Step1：執行 `python news_crawler.py` 爬取昨日新聞
-- Step2：執行 `python parsing.py` 剖析新聞
-- Step3：執行 `python transform.py` 對剖析檔做ETL
-- Step4：資料預計輸出於 `../../ShareDiskE/News_Stocks/`
+- Step1：修改 `set.json` 將根路徑改為需要的
+- Step2：執行 `python news_crawler.py` 爬取昨日新聞
+- Step3：執行 `python parsing.py` 剖析新聞
+- Step4：執行 `python transform.py` 對剖析檔做ETL
+- Step5：資料預計於 `Step1` 所設定的路徑下，產生 `News_Stocks` 的資料夾
   - 沒有該資料夾的話會自己創建,不須擔心路徑缺失
   - 若要更改輸出資料夾的話可以聯絡我,只需要改一行，但用打的不好說明邏輯
 
@@ -69,6 +70,7 @@
 - `stock_index_confirm.csv`：股票代號檔
 - `holiday.csv`：台灣例假日資訊,需要手動更新 (更新頻率: 1/years)
 - `workday.csv`：台灣補上班日資訊,經法規修改後已不需要
+- `set.json`：路徑設定檔
 
 ### 2. 程式檔功能
 - `news_crawler.py`：執行twse_mops_crawler.py的主程式檔 (手動使用,未加入排程)
@@ -87,8 +89,8 @@
   - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
 
 
-- 爬取昨日公告：`python news_crawler.py`
-  - 即為爬取昨日公告，預設爬取當天日期-1天的公告
+- 爬取前一個月公告：`python news_crawler.py`
+  - 預設爬取當天日期-29天 ~ -1天的公告
   - 可於路徑 `../../../ShareDiskE/News_Stocks` 找到爬取檔案
 
 <br>
@@ -112,7 +114,10 @@
 ## 四、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
 <hr>
 
-### 1. 已驗證過六年上市櫃資料
+### 1. 更新紀錄
+  - 07/22：將預設爬取日期改為 -29天 ~ -1天、新增爬蟲的log，置於news_crawler資料夾下
+
+### 2. 已驗證過六年上市櫃資料
   - 2015/03/16後為<a href="https://www.twse.com.tw/ch/products/publication/download/0001001837.pdf">停券起訖日新法規</a>的開始日，故從2015/04/01後開始驗證
   - 日期驗證OK (比對停券起迄日與<a href="https://www.twse.com.tw/zh/page/trading/exchange/BFI84U2.html">證交所</a>/<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心</a>的是否相同)
   - 櫃買中心停券預告的問題
@@ -125,7 +130,7 @@
     - 排除規則：若新聞公告的主旨有 "子公司" 的會予以排除 (保留電子公司)
     - 特殊處理："n代n" 的主旨需要記成規則進行排除 (如富邦金控代富邦投信、台新金控代台新投顧)
 
-### 2. 各種參考網站
+### 3. 各種參考網站
 
 - 需手動更新資料相關：
   - 假日更新：<a href="https://www.twse.com.tw/zh/holidaySchedule/holidaySchedule">證交所-市場開休日查詢</a>

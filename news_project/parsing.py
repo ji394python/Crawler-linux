@@ -16,6 +16,7 @@ import pandas as pd
 from pandas_datareader import data as pdr 
 import traceback
 import re
+import json
 
 def finding(folderPath:str) -> list: 
 	'''
@@ -180,7 +181,8 @@ if __name__ == '__main__':
 
 	#路徑設定 (需要手動改的地方)
 	#只要決定"根路徑"即可
-	output_dir_path = r'../../ShareDiskE'
+	output_dir_path_dict = json.load(open(r'set.json','r+'))
+	output_dir_path = output_dir_path_dict['output_dir_path']
 
 	#路徑設定 (不用更動的地方)
 	output_dir_path_News = os.path.join(output_dir_path,'News_Stocks')
