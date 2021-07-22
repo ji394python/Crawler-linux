@@ -29,9 +29,6 @@ def strToAppend(file, text):
 
 if __name__ == '__main__':
 
-    if os.path.exists('../../../ShareDiskE/News_Stocks') == False:
-        os.makedirs('../../../ShareDiskE/News_Stocks')
-    
     # 輸入參數
     if len(sys.argv) < 4:
         print('Usage: python twse_mops_crawler.py <year> <month> <day> <output_folder>')
@@ -42,10 +39,15 @@ if __name__ == '__main__':
     day = sys.argv[3]
     output_folder = '../../../ShareDiskE/News_Stocks'
     dateCheck = f"{year}-{month}-{day}"
+    
     if len(sys.argv) == 5:
         output_folder = sys.argv[4]
+        
     output_folder += '/{}-{}-{}'.format(year, month, day)
     year = str(int(year)-1911)
+
+    if os.path.exists(output_folder) == False:
+        os.makedirs(output_folder)
 
     # 建立輸出資料夾
     try:
