@@ -81,7 +81,7 @@ if __name__ == '__main__':
             for date in dateList:
                 if date.find('.') != -1: continue 
                 if date in checkDate: continue
-                #if date == gmt: continue   #忽略當前時間
+                if date == gmt: continue   #忽略當前時間
                 if storeDate.count(date) == 0:
                     storeDate.append(date)
                 header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
@@ -113,7 +113,7 @@ if __name__ == '__main__':
                         rowStore.append(row)
                 #print(len(rowStore),header)
                 df = pd.DataFrame(rowStore,columns=header)
-                df = etl.dataframeUseful(df).data
+                df = reduceMemory(df)
                 df.sort_values('Machine Time',inplace=True)
                 tickerSet = set(df['SYM'])
                 for i in tickerSet:
@@ -134,7 +134,7 @@ if __name__ == '__main__':
             f.close()
     except:
         with open('錯誤訊息.txt','w+') as f:
-            f.write(traceback.format_exc())
+            f.write(f"{datetime.now()}:{traceback.format_exc()}")
             f.close()
         
 
