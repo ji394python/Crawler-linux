@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
 import time
+import json
 
 
 # Get source code of the web page
@@ -387,7 +388,8 @@ def main():
 if __name__ == '__main__':
 
     #script_path = os.path.dirname(os.path.abspath('__file__'))  # Get parent path
-    output_dir_path = '../../ShareDiskE/News_CB'
+    rootPath = json.load(open('set.json','r+'))['output_dir_path']
+    output_dir_path = f'{rootPath}/News_CB'
     if not os.path.exists(output_dir_path):
         os.makedirs(output_dir_path)
 
