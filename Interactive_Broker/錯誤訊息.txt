@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "parsing.py", line 109, in <module>
-    for row in temp.iterrows():
-AttributeError: 'numpy.float64' object has no attribute 'iterrows'

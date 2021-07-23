@@ -56,13 +56,12 @@
 - `date.csv`：紀錄哪些日子的未標準化檔案已進行過標準化,避免重複轉換 (更新頻率: 1/day)
 - `record.txt`：每爬取一次IB的網站即更新一次 (更新頻率: 1/min)
 - `parsing.txt`：記錄每天標準化檔案的執行時間 (更新頻率: 1/day)
+- `set.json`：路徑設定檔
 
 ### 2. Py檔功能
 - `crawler.py`：執行爬取IB FTP網站的主程式檔  (執行頻率：每1分鐘爬取一次)
 - `parsing.py`：執行剖析未標準化檔案至標準化檔案的主程式檔  (執行頻率：每日早上7點執行)
 - `ftp.py`：FTP的爬蟲的Module,留著待使用
-- `moving.py`：搬運程式的py檔,目前不需用到
-- `ETL.py`：優化處理速度的module
 
 ### 3. 執行範例
 - 爬取IB FTP網站：於終端機輸入 `python crawler.py`，即可在路徑 `../../ShareDiskE/Shortable/IB/` 看到爬取之未標準化檔案
@@ -78,6 +77,10 @@
 ## 三、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
 <hr>
 
-1. 若該國當天未開市,則會有Base資料夾但無Timeseies資料夾
-    - 如2021-06-19的IN,無Timeseries資料夾,而Base中雖有檔案但打開為header+#EOF
+- 0723 刪除`moving.py`、`ETL.py`，兩者已內化到 `parsing.py`
 
+- 0722 新增 `set.json` 作為根路徑控制，只要設定路徑，此IB爬蟲就會長在該資料夾下
+
+- 若該國當天未開市,則會有Base資料夾但無Timeseies資料夾
+    - 如2021-06-19的IN,無Timeseries資料夾,而Base中雖有檔案但打開為header+#EOF
+ 
