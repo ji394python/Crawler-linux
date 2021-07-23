@@ -5,7 +5,7 @@ import os
 import csv
 from datetime import datetime, tzinfo
 from dateutil import tz
-import log_manager as log
+#import log_manager as log
 
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
