@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # 爬取公開資訊觀測站的公司債公告網址：https://mops.twse.com.tw/mops/web/t108sb08_1_q2
+# 爬取原始新聞
+
 """
 @author: Denver Liu
 

@@ -17,7 +17,7 @@ from time import sleep
 import json
 
 end = datetime.now() - timedelta(days=1)
-start = datetime.now() - timedelta(days=30)
+start = datetime.now() - timedelta(days=30) #日後可以統一爬取昨天就好，不要這樣爬
 
 parser = argparse.ArgumentParser(description=
         '目標：下載公開資訊觀測站-每日重大訊息/歷史重大訊息 \
