@@ -4,7 +4,6 @@ import csv
 from datetime import datetime,timedelta
 import time 
 from dateutil import tz
-import ETL as etl
 import traceback
 import json
 import numpy as np
