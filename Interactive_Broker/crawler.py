@@ -5,6 +5,7 @@ import os
 import csv
 from datetime import datetime, tzinfo
 from dateutil import tz
+import log_manager as log
 
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
@@ -80,6 +81,7 @@ def pathControl(path:str):
 
 if __name__ == '__main__':
     
+    output_dir_path = json.load(open('set.json','r+'))['output_dir_path']
     country = json.load(open('country.json','r+',encoding='utf-8'))
     ftp = ftplib.FTP(host='ftp3.interactivebrokers.com',user='shortstock',passwd='')
     target = ftp.nlst()
@@ -87,13 +89,13 @@ if __name__ == '__main__':
         index = file.rfind('.txt')
         if file[index:] == '.txt':
 
-            downloadFile(ftp,file,'../../ShareDiskE/Shortable/IB/Raw/'+file)
+            downloadFile(ftp,file, output_dir_path + '/Shortable/IB/Raw/'+file )
             
             name = country[file[:-4]]['alpha2']
             
-            convertCsv('../../ShareDiskE/Shortable/IB/Raw/'+file,'../../ShareDiskE/Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
+            convertCsv(output_dir_path + '/Shortable/IB/Raw/'+file,output_dir_path + '/Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
 
-    os.system('rm -r ../../ShareDiskE/Shortable/IB/Raw')
+    os.system(f'rm -r {output_dir_path + "/Shortable/IB/Raw"}')
 
     with open('record.txt','a+') as f:
         f.write(f"{datetime.now()}")

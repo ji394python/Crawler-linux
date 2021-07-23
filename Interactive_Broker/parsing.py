@@ -6,6 +6,8 @@ import time
 from dateutil import tz
 import ETL as etl
 import traceback
+import json
+import numpy as np
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
 #- 標準化檔案： Shortable\IB\{Country}\ {Date}\Timeseies \{Ticker}_{Country}_Shortable_{Date}.csv
 def pathControl(path:str):
@@ -36,12 +38,38 @@ def pathControl(path:str):
         temp = temp + '/' + i
         dirCreate(temp)
 
-        
+def reduceMemory(df):
+        numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+        start_mem = df.memory_usage().sum() / 1024**2
+        for col in df.columns:
+            col_type = df[col].dtypes
+            if col_type in numerics:
+                c_min = df[col].min()
+                c_max = df[col].max()
+                if str(col_type)[:3] == 'int':
+                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                        df[col] = df[col].astype(np.int8)
+                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                        df[col] = df[col].astype(np.int16)
+                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                        df[col] = df[col].astype(np.int32)
+                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                        df[col] = df[col].astype(np.int64)
+                else:
+                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                        df[col] = df[col].astype(np.float16)
+                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                        df[col] = df[col].astype(np.float32)
+                    else:
+                        df[col] = df[col].astype(np.float64)
+        end_mem = df.memory_usage().sum() / 1024**2
+        return(df)
 
 if __name__ == '__main__':
     try:
         start = time.perf_counter_ns()
-        basePath = '../../ShareDiskE/Shortable/IB'
+        output_dir_path = json.load(open('set.json','r+'))['output_dir_path']
+        basePath = output_dir_path + '/Shortable/IB'
         outputHeader = ['Machine Time', 'Unix Time','SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE']
         gmt = str(datetime.now())[:10]
         dfCheck = pd.read_csv('date.csv')
@@ -54,7 +82,7 @@ if __name__ == '__main__':
             for date in dateList:
                 if date.find('.') != -1: continue 
                 if date in checkDate: continue
-                if date == gmt: continue
+                #if date == gmt: continue   #忽略當前時間
                 if storeDate.count(date) == 0:
                     storeDate.append(date)
                 header = ['SYM', 'CUR', 'NAME', 'CON', 'ISIN', 'REBATERATE', 'FEERATE','AVAILABLE','Machine Time','Unix Time']
@@ -68,8 +96,11 @@ if __name__ == '__main__':
                     except pd.errors.EmptyDataError:
                         print(f"檔案為空：{country}/{date}/Base/{file}")
                     except:
-                        traceback.print_exc()
-                    temp = etl.dataframeUseful(temp).data
+                        with open('錯誤訊息.txt','w+') as f:
+                            f.write(traceback.format_exc())
+                            f.write('此為讀取csv錯誤')
+                            f.close()
+                    temp = reduceMemory(temp)
                     d = file[file.find('Shortable')+10:file.find('.csv')]
                     dateO = datetime.strptime(d,'%Y-%m-%d_%H-%M-%S')
                     machine = dateO.strftime('%Y/%m/%d %H:%M:%S')
@@ -88,8 +119,11 @@ if __name__ == '__main__':
                 tickerSet = set(df['SYM'])
                 for i in tickerSet:
                     temp_df_ticker = df[df['SYM']==i][outputHeader]
-                    pathControl(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
-                    temp_df_ticker.to_csv(f"../../ShareDiskE/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
+                    pathControl(f"{output_dir_path}/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv")
+                    if os.path.exists(f'{output_dir_path}/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv'):
+                        #print(f'已存在檔案，忽略:{output_dir_path}/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv')
+                        continue
+                    temp_df_ticker.to_csv(f"{output_dir_path}/Shortable/IB/{countryFold}/{pathD}/Timeseries/{i}_{countryFold}_Shortable_{pathD}.csv",index=False,encoding='big5')
 
         dfCheck = pd.DataFrame({'date':storeDate})
         dfCheck.drop_duplicates('date',inplace=True)
@@ -100,7 +134,7 @@ if __name__ == '__main__':
             f.write('\n')
             f.close()
     except:
-        with open('錯誤訊息','w+') as f:
+        with open('錯誤訊息.txt','w+') as f:
             f.write(traceback.format_exc())
             f.close()
         
