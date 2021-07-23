@@ -27,6 +27,7 @@ import argparse
 from datetime import datetime,timedelta
 import time
 from pandas import date_range
+import json
 
 def getStockID(code:str)->str:
     '''
@@ -69,7 +70,8 @@ if __name__ == '__main__':
     #     print(text.text.strip())
 
     #路徑設定
-    output_dir_path =  '../../ShareDiskE/ETF_NAV/HK/'
+    rootPath = json.load(open('set.json','r+'))['output_dir_path']
+    output_dir_path =  f'{rootPath}/ETF_NAV/HK/'
 
     Date = datetime.now() - timedelta(days=1)
 
@@ -191,7 +193,6 @@ if __name__ == '__main__':
                             else:
                                 if col == 'STOCK_CODE':
                                     code = re.findall(f'{col}:(.*?),',resultText_clean)[0].replace('、','_')
-                                    log.processLog(f'===== 處理檔案_[{int(i/2)}]： {code} ')
                                 # print(i,re.findall(f'{i}:(.*?),',resultText_clean))
 
                         urlFileHead = 'https://www1.hkexnews.hk'
@@ -202,6 +203,8 @@ if __name__ == '__main__':
                         
                         targetFile = r.get(urlFile)
                         with open(f"{output_dir_path}{date}/{fileName}",'wb+') as f:
+                            print(f'寫入：{output_dir_path}{date}/{fileName}')
+                            log.processLog(f'===== 寫入檔案_[{int(i/2)}]： {output_dir_path}{date}/{fileName} ')
                             f.write(targetFile.content)
                             f.close()
 
