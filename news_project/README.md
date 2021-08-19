@@ -5,11 +5,13 @@
 - Step1：修改 `set.json` 將根路徑改為需要的
 - Step2：執行 `python news_crawler.py` 爬取昨日新聞
 - Step3：執行 `python parsing.py` 剖析新聞
+- Step4：執行 `python TWSE_crawler.py` 啟動驗證程序
 - Step4：執行 `python transform.py` 對剖析檔做ETL
 - Step5：資料預計於 `Step1` 所設定的路徑下，產生 `News_Stocks` 的資料夾
   - 沒有該資料夾的話會自己創建,不須擔心路徑缺失
   - 若要更改輸出資料夾的話可以聯絡我,只需要改一行，但用打的不好說明邏輯
-
+<br>
+- 一鍵執行：也可以執行 `bash main.sh`直接執行全部流程
 <br>
 <hr>
 <hr>
@@ -77,6 +79,8 @@
 - `twse_mops_crawler.py`：爬取公開資訊觀測站重大訊息公告的主程式檔 (執行頻率：1/days)
   - 爬取網站：https://mops.twse.com.tw/mops/web/t05st02
 
+- `twse_crawler.py`：爬取證交所/櫃買中心停券預告表，並作為驗證機制檢驗parsing.py產生之結果檔，若缺乏就會補上
+  - 目標網站：<a href="https://www.twse.com.tw/exchangeReport/BFI84U">證交所停券預告表</a>、<a href="https://www.twse.com.tw/exchangeReport/BFI84U2">證交所停券歷史查詢</a>、<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term_result.php">櫃買中心停券預告與歷史查詢表</a>
 - `parsing.py`：剖析重大訊息公告的主程式檔 (執行頻率: 1/days)
 - `transform.py`：ETL使用,針對剖析完檔案使用 (執行頻率： 1/days)
 - `log_manager.py`：程式進程紀錄使用,輸出資料夾(log)置於VM上不納入E槽
@@ -115,21 +119,28 @@
 <hr>
 
 ### 1. 更新紀錄
+  - 08/20：新增證交所/櫃買中心停券預告表的驗證機制，若我們剖析的檔案有缺漏時，可從證交所/櫃買中心補上 (`TWSE_crawler.py`)
   - 07/23：補充: 每年年末要更新 `stock_index_confirm.csv` 和 `holiday.csv` 以確保股票代碼/假日日期是正確的
   - 07/22：將預設爬取日期改為 -29天 ~ -1天、新增爬蟲的log，置於news_crawler資料夾下
 
-### 2. 已驗證過六年上市櫃資料
+### 2. 規則補充
   - 2015/03/16後為<a href="https://www.twse.com.tw/ch/products/publication/download/0001001837.pdf">停券起訖日新法規</a>的開始日，故從2015/04/01後開始驗證
   - 日期驗證OK (比對停券起迄日與<a href="https://www.twse.com.tw/zh/page/trading/exchange/BFI84U2.html">證交所</a>/<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心</a>的是否相同)
   - 櫃買中心停券預告的問題
     - 缺乏資料1：有的公司有發布<a href="https://mops.twse.com.tw/mops/web/t05st01">新聞公告</a>說明停券日期，但<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心查詢網</a>並沒有 (Dropbox:有新聞公告但網站無.csv)
-    - 缺乏資料2：<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心查詢網</a>有公告停券，但<a href="https://mops.twse.com.tw/mops/web/t05st01">新聞公告</a>卻查不到 (Dropbox:上市櫃有停券無新聞公告.xlsx)
+    - 缺乏資料2：<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心查詢網</a>有預告停券，但<a href="https://mops.twse.com.tw/mops/web/t05st01">新聞公告</a>卻查不到 (Dropbox:上市櫃有停券無新聞公告.xlsx)
   - 會有同一天停券的情形：
     - 如神基(3005)於2021/02/25公告股東常會與除息相關訊息，而停券日則為同一天
     - 此情況在未來Py檔剖析的停券預告表都會<b style="color:#ffaaaa">予以保留</b>
   - 代子公司發布的狀況：
     - 排除規則：若新聞公告的主旨有 "子公司" 的會予以排除 (保留電子公司)
     - 特殊處理："n代n" 的主旨需要記成規則進行排除 (如富邦金控代富邦投信、台新金控代台新投顧)
+  - 存託憑證(DR)：
+    - 不按照一般格式走，有的是自己給pdf連結，有的是使用文字不同(停止過戶日期起始)
+    - 此類仍須增加許多規則才能完成
+  - 驗證程序(`TWSE_crawler.py`) 對應回 `data.csv` (由`parsing.py`產生)的方式為 mapping 「股票代號、停券起日、停券迄日」三欄位，若不相同就會append至`data.csv`
+  - 證交所將"結算交割日"視為停券起迄計算之工作日，而目前程式將其當作假日，停券起迄日會比預告表來的更早 (已確認過目前不用改此狀況)
+  - 
 
 ### 3. 各種參考網站
 
@@ -143,6 +154,7 @@
   - 新聞公告：<a href="https://mops.twse.com.tw/mops/web/t05st01">公開資訊觀測站-歷史重大訊息</a>
   - 停券預告1：<a href="https://www.twse.com.tw/zh/page/trading/exchange/BFI84U2.html">證交所-停券預告表</a>
   - 停券預告2：<a href="https://www.tpex.org.tw/web/stock/margin_trading/term/term.php?l=zh-tw">櫃買中心-停券預告表</a>
+  - 停券歷史1：<a href="https://www.twse.com.tw/exchangeReport/BFI84U2">證交所停券歷史查詢</a>
 
 <br>
 
