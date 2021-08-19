@@ -2,7 +2,7 @@
 """
 Author: Denver Liu
 
-Last Updated: 2021/07/08
+Last Updated: 2021/07/30
 
 """
 import log_manager as log
@@ -26,7 +26,7 @@ def finding(folderPath:str) -> list:
 	
 	#呼叫全域變數 - 其實不需要也沒關係,為了pythonic
 	global reasonDict
-	global stockNameList
+	global stockCodeList
 	global holidayList
 	global workdayList
 
@@ -36,6 +36,7 @@ def finding(folderPath:str) -> list:
 	for i in allFileList: # ../../ShareDiskE/News_Stocks/${Date}/${File}
 		#nameoffile = i
 		path = folderPath + '/' + i
+		#path=r'C:\Users\chiaming\Documents\GitHub\NasHome\News_Stocks\2021-02-26\8942_森鉅_2021-02-26_155120.txt'
 		file = open(path, 'r',encoding='utf-8-sig')
 		log.processLog(f'=== 剖析{path}')
 		#print(path)
@@ -47,13 +48,19 @@ def finding(folderPath:str) -> list:
 				#排除代子公司、代重要子公司、第一個字為代
 					#排除
 		try:
-			if nameofstock[1] in stockNameList: #在股票代碼內
+			if nameofstock[0] in stockCodeList: #在股票代碼內
 				#print(nameofstock)
 				if words.find('停止過戶起始日期') != -1: #有這幾個字
 					#日期
 					pos_trade_date = words.find('停止過戶起始日期')
-				#	print(pos_trade_date)
-					date_string = words[pos_trade_date:words.find('\n',pos_trade_date)].strip() ##等等來Split 幹
+					pos_title_date = words.find('主旨')
+					title_find = words[pos_title_date:words.find('\n',pos_title_date)].strip()
+					if title_find.find('停止過戶起始日期') != -1:
+						pos_trade_date = words.find('停止過戶起始日期',pos_title_date+len(title_find))
+						date_string = words[pos_trade_date:words.find('\n',pos_trade_date)].strip() ##等等來Split 幹
+					else:
+						date_string = words[pos_trade_date:words.find('\n',pos_trade_date)].strip() ##等等來Split 幹
+					
 					if date_string.find('~') != -1:
 						date_string = date_string[:date_string.find('~')]
 					date_string = date_string.split(':')
@@ -209,11 +216,11 @@ if __name__ == '__main__':
 
 		log.processLog('讀取先驗資料檔: 股票代號、假日資訊')
 		#讀取股票代號:https://www.twse.com.tw/zh/page/products/stock-code2.html
-		stockNameList = pd.read_csv('predata/stock_index_confirm.csv')['name'].values.tolist() 
+		stockCodeList = pd.read_csv('predata/stock_index_confirm.csv')['number'].values.tolist() 
 
 		#讀取台灣例假日資訊:https://www.twse.com.tw/zh/holidaySchedule/holidaySchedule
-		holidayList = pd.read_csv('predata/holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
-		workdayList = pd.read_csv('predata/workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))) 
+		holidayList = pd.read_csv('predata/holiday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))).tolist()
+		workdayList = pd.read_csv('predata/workday.csv')['date'].apply(lambda x: time.strftime('%Y/%m/%d',time.strptime(x,'%Y/%m/%d'))).tolist()
 
 		#每日
 		folderName = os.listdir(output_dir_path_News)

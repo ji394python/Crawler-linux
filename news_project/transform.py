@@ -40,7 +40,7 @@ if __name__ == '__main__':
         df.to_csv(output_file_path_dataCsv,encoding='utf-8-sig',index=False)
         
         end = time.perf_counter_ns() 
-        log.processLog(f'【結束程序】 parsing.py - 執行時間:{(end-start)/10**9}')
+        log.processLog(f'【結束程序】 transform.py - 執行時間:{(end-start)/10**9}')
         
         log.processLog('==============================================================================================')
 
