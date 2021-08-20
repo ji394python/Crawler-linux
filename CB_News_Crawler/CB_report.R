@@ -2,18 +2,18 @@
 
 library(dplyr)
 library(lubridate)
-
-dir_list <- list.files("../data/bond_news")
+newPath = 'C:/Users/chiaming/Documents/GitHub/NasHome/News_CB'
+dir_list <- list.files(newPath)
 file_list <- c()
 for(i in 1:length(dir_list)){
-  a <- paste0("../data/bond_news/", dir_list[i])
+  a <- paste0(newPath,'/',dir_list[i])
   file_list_temp <- paste0(a, '/', list.files(a))
   file_list <- c(file_list, file_list_temp)
 }
 DT <- data.frame(file_path = file_list, stringsAsFactors=FALSE)
 
 DT <- DT %>%
-  mutate(date = ymd(substr(file_path, 19, 26)),
+  mutate(date = ymd(substr(file_path, 52, 61)),
          name = NA,
          id_hat = NA)
 
@@ -114,8 +114,8 @@ DT_1 <- DT_1 %>%
 names(DT_1)[1] <- '公告日'
 names(DT_1)[2] <- '可轉債名稱'
 names(DT_1)[3] <- '可轉債代號'
-
-write.csv(DT_1, '../data/CB_report/可轉債轉換價調整_20210512.csv')
+library(stringr)
+write.csv(DT_1, str_c(newPath,'/可轉債轉換價調整_20210512.csv'))
 
 # i <- 41
 # test <- readLines(DT_1$file_path[i])
@@ -212,7 +212,7 @@ names(DT_2)[1] <- '公告日'
 names(DT_2)[2] <- '可轉債名稱'
 names(DT_2)[3] <- '可轉債代號'
 
-write.csv(DT_2, '../data/CB_report/可轉債贖回_20210512.csv')
+write.csv(DT_2, str_c(newPath,'/可轉債贖回_20210512.csv'))
 
 
 DT_3 <- DT
@@ -345,6 +345,6 @@ names(DT_3)[1] <- '公告日'
 names(DT_3)[2] <- '可轉債名稱'
 names(DT_3)[3] <- '可轉債代號'
 
-write.csv(DT_3, '../data/CB_report/可轉債停止轉換_20210512.csv')
+write.csv(DT_3, str_c(newPath,'/可轉債停止轉換_20210512.csv'))
 
 

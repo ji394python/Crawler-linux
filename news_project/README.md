@@ -1,7 +1,7 @@
-## 一、如何執行
+## 一、執行與維護方式
 <hr>
 
-### 1. 執行流程
+### 1. 執行方式
 - Step1：修改 `set.json` 將根路徑改為需要的
 - Step2：執行 `python news_crawler.py` 爬取昨日新聞
 - Step3：執行 `python parsing.py` 剖析新聞
@@ -11,7 +11,26 @@
   - 沒有該資料夾的話會自己創建,不須擔心路徑缺失
   - 若要更改輸出資料夾的話可以聯絡我,只需要改一行，但用打的不好說明邏輯
 <br>
-- 一鍵執行：也可以執行 `bash main.sh`直接執行全部流程
+- <span style="color:#ffaaaa"> 一鍵執行 </span>：也可以執行 `bash main.sh`直接執行全部流程
+
+
+### 2.維護方式
+  - 更新手冊
+    - 更新`predata`的資料 (scp本地端傳入)
+    - 更新`main.sh` (將python改為python3)
+    - 更新`news_crawler.py` (將python改為python3)
+    - 更新`set.json`路徑 (測試機：`"../../NasHome"`，正式機：`."./../NasPublic"`)
+    - 記住正式機的`set.json`路徑目前恆不一樣，且不上傳，一律pull下來後再改
+
+  - 待觀察
+    - 測試機明天停券公告剖析狀況 (檢查done_date、data.csv、news_crawler/log、log)
+    - 正式機明天停券公告剖析狀況 (檢查done_date、data.csv、news_crawler/log、log)
+
+  - 可優化方向
+    - 根據作業系統不同選擇python3 or python
+    - 根據ip位址決定跟路徑
+    - 自我檢查機制與推波
+
 <br>
 <hr>
 <hr>

@@ -9,16 +9,18 @@ Last Modified：07/10
 
 """
 
+
 import os
 import re
-import sys
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from datetime import datetime
+from datetime import datetime,timedelta
 import time
 import json
-
+import argparse
+from argparse import RawTextHelpFormatter
+import log_manager as log
 
 # Get source code of the web page
 def getWebpage(url: str) -> str:
@@ -50,35 +52,16 @@ def transferDate(dateString: str) -> datetime.timetuple:
         return None
 
 
-def main():
+def main(DDate):
+
     start_time = datetime.now()
 
-    # Read input variables
-    if len(sys.argv) == 2:
-        try:
-            data['month'] = sys.argv[1].split('-')[1]
-            data['day1'] = sys.argv[1].split('-')[2]
-            data['day2'] = sys.argv[1].split('-')[2]
-            data['year'] = str(int(sys.argv[1].split('-')[0]) - 1911)
-            date = sys.argv[1]
-        except:
-            print('Usage:   python convertible_bond_news_daily_scraper.py <year>-<month>-<day>')
-            print('Format:  python convertible_bond_news_daily_scraper.py YYYY-MM-DD')
-            print('Example: python convertible_bond_news_daily_scraper.py 2021-04-12')
-            exit(1)  # 代表因錯誤而退出
-            # exit(0) #代表正常退出
-    elif len(sys.argv) == 1:
-        data['month'] = today_datetime.month
-        data['day1'] = today_datetime.day
-        data['day2'] = today_datetime.day
-        data['year'] = today_datetime.year - 1911
-        date = today_datetime.strftime('%Y-%m-%d')
-    else:
-        print('Usage:   python convertible_bond_news_daily_scraper.py <year>-<month>-<day>')
-        print('Format:  python convertible_bond_news_daily_scraper.py YYYY-MM-DD')
-        print('Example: python convertible_bond_news_daily_scraper.py 2021-04-12')
-        exit(1)
-
+    data['month'] = DDate.split('-')[1]
+    data['day1'] = DDate.split('-')[2]
+    data['day2'] = DDate.split('-')[2]
+    data['year'] = str(int(DDate.split('-')[0]) - 1911)
+    date = DDate
+        
     # Record number of crawled news
     news_count = 0
     # Transfer news Dataframes
@@ -196,12 +179,12 @@ def main():
                                 text = ''
                                 for i in range(len(trs)):
                                     text += trs[i].text + '\n'
-
+                                text = text = text.replace('\xa0','').replace('\u3000','').replace('\ufa08','')
                                 # Write transfer news to text file
                                 text_path = os.path.join(output_dir_path, tds[2].strftime('%Y-%m-%d'))
                                 if not os.path.exists(text_path):
                                     os.makedirs(text_path)
-                                with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y-%m-%d') +'_' + tds[3] + '.txt'),'w',encoding='utf_8_sig') as f:
+                                with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y-%m-%d') +'_' + tds[3] + '.txt'),'w',encoding='big5') as f:
                                     f.write(text)
                                 news_count += 1
                             except Exception as e:
@@ -293,12 +276,13 @@ def main():
                                 text = ''
                                 for i in range(len(trs)):
                                     text += trs[i].text + '\n'
+                                text = text.replace('\xa0','').replace('\u3000','').replace('\ufa08','')
 
                                 # Write price news to text file
                                 text_path = os.path.join(output_dir_path, tds[3].strftime('%Y-%m-%d'))
                                 if not os.path.exists(text_path):
                                     os.makedirs(text_path)
-                                with open(os.path.join(text_path, tds[1] + '_' + tds[2] +'_' + tds[3].strftime('%Y-%m-%d') +'_' + tds[4] + '.txt'),'w',encoding='utf_8_sig') as f:
+                                with open(os.path.join(text_path, tds[1] + '_' + tds[2] +'_' + tds[3].strftime('%Y-%m-%d') +'_' + tds[4] + '.txt'),'w',encoding='big5') as f:
                                     f.write(text)
                                 news_count += 1
                             except Exception as e:
@@ -331,44 +315,44 @@ def main():
         # Write empty transfer news info to CSV sorted by release date if any
         if not empty_transfer_df.empty:
             empty_transfer_df.sort_values(by=['申報日期'],ascending=False,inplace=True)
-            empty_transfer_path = os.path.join(output_dir_path, 'transfer_empty_' +today_datetime.strftime('%Y-%m-%d') + '.csv')
+            empty_transfer_path = os.path.join(output_dir_path, 'transfer_empty_' +Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(empty_transfer_path):
-                empty_transfer_df.to_csv(empty_transfer_path,encoding='utf_8_sig',index=False)
+                empty_transfer_df.to_csv(empty_transfer_path,encoding='big5',index=False)
             else:
-                empty_transfer_df.to_csv(empty_transfer_path,mode='a',header=False,encoding='utf_8_sig',index=False)
+                empty_transfer_df.to_csv(empty_transfer_path,mode='a',header=False,encoding='big5',index=False)
 
         # Write invalid transfer news info to CSV sorted by release date if any
         if not invalid_transfer_df.empty:
             invalid_transfer_df.sort_values(by=['申報日期'],ascending=False,inplace=True)
-            invalid_transfer_path = os.path.join(output_dir_path, 'transfer_invalid_' +today_datetime.strftime('%Y-%m-%d') + '.csv')
+            invalid_transfer_path = os.path.join(output_dir_path, 'transfer_invalid_' +Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(invalid_transfer_path):
-                invalid_transfer_df.to_csv(invalid_transfer_path,encoding='utf_8_sig',index=False)
+                invalid_transfer_df.to_csv(invalid_transfer_path,encoding='big5',index=False)
             else:
-                invalid_transfer_df.to_csv(invalid_transfer_path, mode='a', header=False,encoding='utf_8_sig',index=False)
+                invalid_transfer_df.to_csv(invalid_transfer_path, mode='a', header=False,encoding='big5',index=False)
 
         # Save price news info
         # Write empty price news info to CSV sorted by release date if any
         if not empty_price_df.empty:
             empty_price_df.sort_values(by=['申報日期'],ascending=False,inplace=True)
-            empty_price_path = os.path.join(output_dir_path,'price_empty_' + today_datetime.strftime('%Y-%m-%d') + '.csv')
+            empty_price_path = os.path.join(output_dir_path,'price_empty_' + Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(empty_price_path):
-                empty_price_df.to_csv(empty_price_path,encoding='utf_8_sig',index=False)
+                empty_price_df.to_csv(empty_price_path,encoding='big5',index=False)
             else:
-                empty_price_df.to_csv(empty_price_path,mode='a',header=False,encoding='utf_8_sig',index=False)
+                empty_price_df.to_csv(empty_price_path,mode='a',header=False,encoding='big5',index=False)
 
         # Write invalid price news info to CSV sorted by release date if any
         if not invalid_price_df.empty:
             invalid_price_df.sort_values(by=['申報日期'],ascending=False,inplace=True)
-            invalid_price_path = os.path.join(output_dir_path, 'price_invalid_' + today_datetime.strftime('%Y-%m-%d') + '.csv')
+            invalid_price_path = os.path.join(output_dir_path, 'price_invalid_' + Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(invalid_price_path):
-                invalid_price_df.to_csv(invalid_price_path,encoding='utf_8_sig',index=False)
+                invalid_price_df.to_csv(invalid_price_path,encoding='big5',index=False)
 
             else:
-                invalid_price_df.to_csv(invalid_price_path,mode='a',header=False,encoding='utf_8_sig',index=False)
+                invalid_price_df.to_csv(invalid_price_path,mode='a',header=False,encoding='big5',index=False)
 
         print('===================================================')
         print('Crawling finished.')
@@ -389,30 +373,31 @@ def main():
 
 if __name__ == '__main__':
 
-    #script_path = os.path.dirname(os.path.abspath('__file__'))  # Get parent path
+    #路徑控制
     rootPath = json.load(open('set.json','r+'))['output_dir_path']
     output_dir_path = f'{rootPath}/News_CB'
     if not os.path.exists(output_dir_path):
         os.makedirs(output_dir_path)
+    
+    #日期預設
+    Date = datetime.now() - timedelta(days=1) #預設爬取昨天的新聞
 
-    today_datetime = datetime.today()  # 跟datetime.now()相同
-    TWSE_URL = 'https://mops.twse.com.tw'
-    INDEX_URL = TWSE_URL + '/mops/web/ajax_t108sb08_1'
-    headers = {
-        'Content-Type':
-        'application/x-www-form-urlencoded',
-        'Origin':TWSE_URL,
-        'Referer':TWSE_URL + '/mops/web/t108sb08_1_q2',
-        'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
-    }
-    data = {
-        'encodeURIComponent': '1',
-        'run': 'Y',
-        'step': '1',
-        'firstin': 'true',
-        'TYPEK': 'pub'  # 市場別,pub公開發行、sii上市、otc上櫃、rotc興櫃
-    }
+    #參數呼叫方式
+    parser = argparse.ArgumentParser(description='目標：下載公開資訊觀測站-公司債公告彙總表 \
+        \n網址：https://mops.twse.com.tw/mops/web/t108sb08_1_q2\
+        \nOptional you can download data for a specific time range.\
+        \nDefault crawler date is your execute date - 1 \
+        \nExamples: python3 CB_News_Crawler.py -st 2021/06/01 -et 2021/06/30 ', formatter_class=RawTextHelpFormatter)
+
+
+    parser.add_argument('-st', '--start', action='store', dest='startDate', type=str,
+                        help='enter startDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
+
+    parser.add_argument('-et', '--end', action='store', dest='endDate', type=str,
+                        help='enter endDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
+
+    args = parser.parse_args()
+    dates = pd.date_range(start=args.startDate, end=args.endDate)
 
     # Variables for connection
     # Maximum number of reconnection attempts
@@ -420,4 +405,26 @@ if __name__ == '__main__':
     # Timeout in second
     timeout = 6
 
-    main()
+    for date_temp in dates:
+
+        TWSE_URL = 'https://mops.twse.com.tw'
+        INDEX_URL = TWSE_URL + '/mops/web/ajax_t108sb08_1'
+        headers = {
+            'Content-Type':
+            'application/x-www-form-urlencoded',
+            'Origin':TWSE_URL,
+            'Referer':TWSE_URL + '/mops/web/t108sb08_1_q2',
+            'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
+        }
+        data = {
+            'encodeURIComponent': '1',
+            'run': 'Y',
+            'step': '1',
+            'firstin': 'true',
+            'TYPEK': 'pub'  # 市場別,pub公開發行、sii上市、otc上櫃、rotc興櫃
+        }
+
+        DDate = date_temp.strftime("%Y-%m-%d")
+        main(DDate)
+
