@@ -74,8 +74,10 @@
 <br>
 <br>
 
-## 三、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
+## 三、更新紀錄&補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
 <hr>
+
+- 0907 更新 `parsing.py` ，解決因頻率不一導致的路徑增減錯誤
 
 - 0723 刪除`moving.py`、`ETL.py`，兩者已內化到 `parsing.py`
 
