@@ -76,6 +76,7 @@ if __name__ == '__main__':
         storeDate = checkDate.copy()
         for countryFold in os.listdir(basePath):
             if countryFold.find('.') != -1: continue
+            if countryFold.find('Raw') != -1: continue
             country = basePath + '/' + countryFold
             dateList = os.listdir(country)
             for date in dateList:
