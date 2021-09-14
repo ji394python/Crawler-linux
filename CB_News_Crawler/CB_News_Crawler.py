@@ -5,7 +5,7 @@
 """
 @author: Denver Liu
 
-Last Modified：07/10
+Last Modified：08/26
 
 """
 
@@ -21,6 +21,7 @@ import json
 import argparse
 from argparse import RawTextHelpFormatter
 import log_manager as log
+import traceback
 
 # Get source code of the web page
 def getWebpage(url: str) -> str:
@@ -94,18 +95,24 @@ def main(DDate):
             index_page = getWebpage(INDEX_URL)
         except Exception as e:
             print('---------------------------------------------------')
+            log.processLog('---------------------------------------------------')
             print('Crawling failed with error:', str(e))
+            log.processLog(f'Crawling failed with error:{str(e)}')
             if connect_count == max_attempt - 1:
                 print('Failed to reach the index page. Please restart the execution.')
+                log.processLog('Failed to reach the index page. Please restart the execution.')
                 break
             else:
                 print('Reconnect to index page.')
+                log.processLog('Reconnect to index page.')
             print('---------------------------------------------------')
+            log.processLog('---------------------------------------------------')
             connect_count += 1
             continue
 
         if index_page:  # not amount to zero
             print('Start crawling news info on %s...' % date)
+            log.processLog('Start crawling news info on %s...' % date)
             soup = BeautifulSoup(index_page, 'html.parser')
             form1 = soup.find('form', {'name': 'fm'})  # 轉(交)換公司債停止轉(交)換公告
             form2 = soup.find('form', {'name': 'formX'})  # 轉換公司債轉換價格變更公告
@@ -156,10 +163,14 @@ def main(DDate):
                             news_page = getWebpage(TWSE_URL + news_url)
                         except Exception as e:
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             print('Crawling failed with error:', str(e))
+                            log.processLog(f'Crawling failed with error:{str(e)}')
                             if connect_count == max_attempt - 1:
                                 print('Failed:', tds[1])
+                                log.processLog(f'Failed:{tds[1]}')
                                 print('Reached maximum number of attempts. Moving to next item.')
+                                log.processLog('Reached maximum number of attempts. Moving to next item.')
                                 # Save invalid transfer news info
                                 invalid_transfer_df.loc[
                                     invalid_transfer_count] = [*tds[:-1]]
@@ -167,12 +178,15 @@ def main(DDate):
                                 break
                             else:
                                 print('Reconnect:', tds[1])
+                                log.processLog(f'Reconnect:{tds[1]}')
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             connect_count += 1
                             continue
 
                         if news_page:
                             print('Crawling news:', tds[1])
+                            log.processLog(f'Crawling news:{tds[1]}')
                             try:
                                 news_soup = BeautifulSoup(news_page, 'html.parser')
                                 trs = news_soup.find_all('table', 'noBorder')[1].find_all('tr')[:-1]
@@ -184,24 +198,33 @@ def main(DDate):
                                 text_path = os.path.join(output_dir_path, tds[2].strftime('%Y-%m-%d'))
                                 if not os.path.exists(text_path):
                                     os.makedirs(text_path)
-                                with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y-%m-%d') +'_' + tds[3] + '.txt'),'w',encoding='big5') as f:
+                                with open(os.path.join(text_path, tds[0] + '_' + tds[1] + '_' + tds[2].strftime('%Y-%m-%d') +'_' + tds[3] + '.txt'),'w',encoding='utf-8-sig') as f:
                                     f.write(text)
                                 news_count += 1
                             except Exception as e:
                                 print('---------------------------------------------------')
+                                log.processLog('---------------------------------------------------')
                                 print('Crawling failed with error:', str(e))
+                                log.processLog(f'Crawling failed with error:{str(e)}')
                                 print('Failed:', tds[1])
+                                log.processLog(f'Failed:{tds[1]}')
                                 print('The news page is connected without required information.')
+                                log.processLog('The news page is connected without required information.')
                                 print('---------------------------------------------------')
+                                log.processLog('---------------------------------------------------')
                                 # Save empty transfer news info
                                 empty_transfer_df.loc[empty_transfer_count] = [*tds[:-1]]
                                 empty_transfer_count += 1
 
                         else:
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             print('Failed:', tds[1])
+                            log.processLog(f'Failed:{tds[1]}')
                             print('The news page is connected without required information.')
+                            log.processLog('The news page is connected without required information.')
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             # Save empty transfer news info
                             empty_transfer_df.loc[empty_transfer_count] = [*tds[:-1]]
                             empty_transfer_count += 1
@@ -254,22 +277,29 @@ def main(DDate):
                             news_page = getWebpage(TWSE_URL + news_url)
                         except Exception as e:
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             print('Crawling failed with error:', str(e))
+                            log.processLog(f'Crawling failed with error:{str(e)}')
                             if connect_count == max_attempt - 1:
                                 print('Failed:', tds[2])
+                                log.processLog(f'Failed:{tds[2]}')
                                 print('Reached maximum number of attempts. Moving to next item.')
+                                log.processLog('Reached maximum number of attempts. Moving to next item.')
                                 # Save invalid price news info
                                 invalid_price_df.loc[invalid_price_count] = [*tds[:-1]]
                                 invalid_price_count += 1
                                 break
                             else:
                                 print('Reconnect:', tds[2])
+                                log.processLog(f'Reconnect:{tds[2]}')
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             connect_count += 1
                             continue
 
                         if news_page:
                             print('Crawling news:', tds[2])
+                            log.processLog(f'Crawling news:{tds[2]}')
                             try:
                                 news_soup = BeautifulSoup(news_page, 'html.parser')
                                 trs = news_soup.find_all('table', 'noBorder')[1].find_all('tr')
@@ -282,24 +312,33 @@ def main(DDate):
                                 text_path = os.path.join(output_dir_path, tds[3].strftime('%Y-%m-%d'))
                                 if not os.path.exists(text_path):
                                     os.makedirs(text_path)
-                                with open(os.path.join(text_path, tds[1] + '_' + tds[2] +'_' + tds[3].strftime('%Y-%m-%d') +'_' + tds[4] + '.txt'),'w',encoding='big5') as f:
+                                with open(os.path.join(text_path, tds[1] + '_' + tds[2] +'_' + tds[3].strftime('%Y-%m-%d') +'_' + tds[4] + '.txt'),'w',encoding='utf-8-sig') as f:
                                     f.write(text)
                                 news_count += 1
                             except Exception as e:
                                 print('---------------------------------------------------')
+                                log.processLog('---------------------------------------------------')
                                 print('Crawling failed with error:', str(e))
+                                log.processLog(f'Crawling failed with error:{str(e)}')
                                 print('Failed:', tds[2])
+                                log.processLog(f'Failed:{tds[2]}')
                                 print('The news page is connected without required information.')
+                                log.processLog('The news page is connected without required information.')
                                 print('---------------------------------------------------')
+                                log.processLog('---------------------------------------------------')
                                 # Save empty price news info
                                 empty_price_df.loc[empty_price_count] = [*tds[:-1]]
                                 empty_price_count += 1
 
                         else:
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             print('Failed:', tds[2])
+                            log.processLog(f'Failed:{tds[2]}')
                             print('The news page is connected without required information.')
+                            log.processLog('The news page is connected without required information.')
                             print('---------------------------------------------------')
+                            log.processLog('---------------------------------------------------')
                             # Save empty price news info
                             empty_price_df.loc[empty_price_count] = [*tds[:-1]]
                             empty_price_count += 1
@@ -307,8 +346,11 @@ def main(DDate):
         # Returned index page HTML is empty or does not contain required info
         else:
             print('---------------------------------------------------')
+            log.processLog('---------------------------------------------------')
             print('The index page is connected without required information.')
+            log.processLog('The index page is connected without required information.')
             print('---------------------------------------------------')
+            log.processLog('---------------------------------------------------')
             break
 
         # Save transfer news info
@@ -318,9 +360,9 @@ def main(DDate):
             empty_transfer_path = os.path.join(output_dir_path, 'transfer_empty_' +Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(empty_transfer_path):
-                empty_transfer_df.to_csv(empty_transfer_path,encoding='big5',index=False)
+                empty_transfer_df.to_csv(empty_transfer_path,encoding='utf-8-sig',index=False)
             else:
-                empty_transfer_df.to_csv(empty_transfer_path,mode='a',header=False,encoding='big5',index=False)
+                empty_transfer_df.to_csv(empty_transfer_path,mode='a',header=False,encoding='utf-8-sig',index=False)
 
         # Write invalid transfer news info to CSV sorted by release date if any
         if not invalid_transfer_df.empty:
@@ -328,9 +370,9 @@ def main(DDate):
             invalid_transfer_path = os.path.join(output_dir_path, 'transfer_invalid_' +Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(invalid_transfer_path):
-                invalid_transfer_df.to_csv(invalid_transfer_path,encoding='big5',index=False)
+                invalid_transfer_df.to_csv(invalid_transfer_path,encoding='utf-8-sig',index=False)
             else:
-                invalid_transfer_df.to_csv(invalid_transfer_path, mode='a', header=False,encoding='big5',index=False)
+                invalid_transfer_df.to_csv(invalid_transfer_path, mode='a', header=False,encoding='utf-8-sig',index=False)
 
         # Save price news info
         # Write empty price news info to CSV sorted by release date if any
@@ -339,9 +381,9 @@ def main(DDate):
             empty_price_path = os.path.join(output_dir_path,'price_empty_' + Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(empty_price_path):
-                empty_price_df.to_csv(empty_price_path,encoding='big5',index=False)
+                empty_price_df.to_csv(empty_price_path,encoding='utf-8-sig',index=False)
             else:
-                empty_price_df.to_csv(empty_price_path,mode='a',header=False,encoding='big5',index=False)
+                empty_price_df.to_csv(empty_price_path,mode='a',header=False,encoding='utf-8-sig',index=False)
 
         # Write invalid price news info to CSV sorted by release date if any
         if not invalid_price_df.empty:
@@ -349,12 +391,12 @@ def main(DDate):
             invalid_price_path = os.path.join(output_dir_path, 'price_invalid_' + Date.strftime('%Y-%m-%d') + '.csv')
             
             if not os.path.isfile(invalid_price_path):
-                invalid_price_df.to_csv(invalid_price_path,encoding='big5',index=False)
+                invalid_price_df.to_csv(invalid_price_path,encoding='utf-8-sig',index=False)
 
             else:
-                invalid_price_df.to_csv(invalid_price_path,mode='a',header=False,encoding='big5',index=False)
+                invalid_price_df.to_csv(invalid_price_path,mode='a',header=False,encoding='utf-8-sig',index=False)
 
-        print('===================================================')
+        print('--------------------------------------')
         print('Crawling finished.')
         print('Number of news retrieved: %d' % (news_count))
         print('Number of empty transfer news: %d' %
@@ -364,11 +406,24 @@ def main(DDate):
         print('Number of empty price news: %d' % (len(empty_price_df.index)))
         print('Number of invalid price news: %d' %
               (len(invalid_price_df.index)))
+        
+        log.processLog('===================================================')
+        log.processLog('Crawling finished.')
+        log.processLog('Number of news retrieved: %d' % (news_count))
+        log.processLog('Number of empty transfer news: %d' %
+              (len(empty_transfer_df.index)))
+        log.processLog('Number of invalid transfer news: %d' %
+              (len(invalid_transfer_df.index)))
+        log.processLog('Number of empty price news: %d' % (len(empty_price_df.index)))
+        log.processLog('Number of invalid price news: %d' %
+              (len(invalid_price_df.index)))
         break
     end_time = datetime.now()
     time_diff = end_time - start_time
     print('Execution time:', str(time_diff))
     print('===================================================')
+    log.processLog(f'Execution time:{str(time_diff)}')
+    log.processLog('===================================================')
 
 
 if __name__ == '__main__':
@@ -382,49 +437,65 @@ if __name__ == '__main__':
     #日期預設
     Date = datetime.now() - timedelta(days=1) #預設爬取昨天的新聞
 
-    #參數呼叫方式
-    parser = argparse.ArgumentParser(description='目標：下載公開資訊觀測站-公司債公告彙總表 \
-        \n網址：https://mops.twse.com.tw/mops/web/t108sb08_1_q2\
-        \nOptional you can download data for a specific time range.\
-        \nDefault crawler date is your execute date - 1 \
-        \nExamples: python3 CB_News_Crawler.py -st 2021/06/01 -et 2021/06/30 ', formatter_class=RawTextHelpFormatter)
+    log.processLog('【開始執行CB_News爬蟲專案】 CB_News_Crawler.py')
+    log.processLog(f"本次根路徑：{rootPath}")
+    start = time.perf_counter_ns()
+    try:
+
+        #參數呼叫方式
+        parser = argparse.ArgumentParser(description='目標：下載公開資訊觀測站-公司債公告彙總表 \
+            \n網址：https://mops.twse.com.tw/mops/web/t108sb08_1_q2\
+            \nOptional you can download data for a specific time range.\
+            \nDefault crawler date is your execute date - 1 \
+            \nExamples: python3 CB_News_Crawler.py -st 2021/06/01 -et 2021/06/30 ', formatter_class=RawTextHelpFormatter)
 
 
-    parser.add_argument('-st', '--start', action='store', dest='startDate', type=str,
-                        help='enter startDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
+        parser.add_argument('-st', '--start', action='store', dest='startDate', type=str,
+                            help='enter startDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
 
-    parser.add_argument('-et', '--end', action='store', dest='endDate', type=str,
-                        help='enter endDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
+        parser.add_argument('-et', '--end', action='store', dest='endDate', type=str,
+                            help='enter endDate: YYYY/mm/dd', default=Date.strftime('%Y/%m/%d'))
 
-    args = parser.parse_args()
-    dates = pd.date_range(start=args.startDate, end=args.endDate)
+        args = parser.parse_args()
+        dates = pd.date_range(start=args.startDate, end=args.endDate)
 
-    # Variables for connection
-    # Maximum number of reconnection attempts
-    max_attempt = 10
-    # Timeout in second
-    timeout = 6
+        log.processLog(f"本次查詢日期：{args.startDate} ~ {args.endDate}")
 
-    for date_temp in dates:
+        # Variables for connection
+        # Maximum number of reconnection attempts
+        max_attempt = 10
+        # Timeout in second
+        timeout = 6
 
-        TWSE_URL = 'https://mops.twse.com.tw'
-        INDEX_URL = TWSE_URL + '/mops/web/ajax_t108sb08_1'
-        headers = {
-            'Content-Type':
-            'application/x-www-form-urlencoded',
-            'Origin':TWSE_URL,
-            'Referer':TWSE_URL + '/mops/web/t108sb08_1_q2',
-            'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
-        }
-        data = {
-            'encodeURIComponent': '1',
-            'run': 'Y',
-            'step': '1',
-            'firstin': 'true',
-            'TYPEK': 'pub'  # 市場別,pub公開發行、sii上市、otc上櫃、rotc興櫃
-        }
+        for date_temp in dates:
 
-        DDate = date_temp.strftime("%Y-%m-%d")
-        main(DDate)
+            TWSE_URL = 'https://mops.twse.com.tw'
+            INDEX_URL = TWSE_URL + '/mops/web/ajax_t108sb08_1'
+            headers = {
+                'Content-Type':
+                'application/x-www-form-urlencoded',
+                'Origin':TWSE_URL,
+                'Referer':TWSE_URL + '/mops/web/t108sb08_1_q2',
+                'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36'
+            }
+            data = {
+                'encodeURIComponent': '1',
+                'run': 'Y',
+                'step': '1',
+                'firstin': 'true',
+                'TYPEK': 'pub'  # 市場別,pub公開發行、sii上市、otc上櫃、rotc興櫃
+            }
+
+            DDate = date_temp.strftime("%Y-%m-%d")
+            main(DDate)
+
+        end = time.perf_counter_ns()
+        log.processLog(f'【結束程序】 CB_News_Crawler.py - 總執行時間:{(end-start)/10**9}')
+        log.processLog('==============================================================================================')
+
+    except Exception as e:
+        log.processLog('發生錯誤:請查看error.log')
+        traceback.print_exc()
+        log.errorLog(traceback.format_exc())
 
