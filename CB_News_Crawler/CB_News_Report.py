@@ -110,11 +110,11 @@ if __name__ == '__main__':
         if len(DT) != 0:
             DT1 = deepcopy(DT)
             AdjPubDate,AdjDate,AdjPriceO,AdjPriceA,AdjName,AdjCode = [],[],[],[],[],[]
-            RedPubDate,RedDate,RedName,RedCode = [],[],[],[]
-            HalStartDate,HalEndDate,HalPubDate,HalName,HalCode = [],[],[],[],[]
+            RedPubDate,RedDate,RedName,RedCode,RedLastDate = [],[],[],[],[]
+            HalStartDate,HalEndDate,HalPubDate,HalName,HalCode, = [],[],[],[],[]
             for i in range(len(DT1)):
                 with open(DT1.iloc[i,0],'r',encoding='utf-8-sig') as f:
-                #with open('../../NasHome/News_CB/2021-03-10/1338_廣華-KY_2021-03-10_1.txt','r+',encoding='utf-8-sig') as f:
+                #with open('../../NasHome/News_CB/2021-01-06/3346_麗清_2021-01-06_1.txt','r+',encoding='utf-8-sig') as f:
                     test = f.readlines()
                     test_f = []
                     test_temp = []
@@ -166,6 +166,23 @@ if __name__ == '__main__':
                             RedDate.append(redDate)
                             RedName.append(Redname)
                             RedCode.append(Redcode)
+                            index = test.index(newR)
+                            RedlastDate_keep = ''
+                            for p in test[index+1:]:
+                                if len(RedlastDate_keep) == 0: 
+                                    RedlastDate = re.findall('最遲應於([0-9]{3})年([0-9]{1,2})月([0-9]{1,2})日',p,re.S)
+                                    if len(RedlastDate) == 0:
+                                        RedlastDate = re.findall('最遲應於民國([0-9]{3})年([0-9]{1,2})月([0-9]{1,2})日',p,re.S)
+                                    if len(RedlastDate) != 0:
+                                        RedlastDate = RedlastDate[0][0] + '/' + RedlastDate[0][1] + '/' + RedlastDate[0][2]
+                                        RedlastDate = transferDate(RedlastDate)
+                                        RedlastDate = str(RedlastDate).replace('-','/') #最後轉換日
+                                        RedlastDate_keep = RedlastDate
+                                    else:
+                                        RedlastDate == ''
+                                    
+                            RedLastDate.append(RedlastDate)
+
                         
                         if ( (newR.find('停止受理轉換') != -1) | (newR.find('停止受理認購') != -1) ):
                             HalpubDate = os.path.dirname(DT1.iloc[i,0])
@@ -201,7 +218,7 @@ if __name__ == '__main__':
                 writer.writerows(rows)
                 csvfile.close()
             
-            rows = zip(RedPubDate,RedName,RedCode,RedDate)
+            rows = zip(RedPubDate,RedName,RedCode,RedDate,RedLastDate)
             with open(output_file_path_red, 'a', newline='',encoding='utf-8-sig') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerows(rows)
