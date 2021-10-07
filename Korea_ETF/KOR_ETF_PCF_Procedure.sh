@@ -1,6 +1,6 @@
 # slightly malformed input data
-input_start=2021-01-1
-input_end=2015-2-23
+input_start=2021-10-05
+input_end=2021-10-08
 
 # After this, startdate and enddate will be valid ISO 8601 dates,
 # or the script will have aborted when it encountered unparseable data
@@ -11,5 +11,7 @@ enddate=$(date -I -d "$input_end")     || exit -1
 d="$startdate"
 while [ "$d" != "$enddate" ]; do 
   echo $d
-  d=$(date -I -d "$d + 1 day")
+  python KOR_Crawler_ETF_PCF.py -d $d
+  d=$(date -I -d  "$d + 1 day")
 done
+

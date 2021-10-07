@@ -79,14 +79,14 @@ if __name__ == '__main__':
         #日期設定
         startDate = datetime.strftime(datetime.now() - timedelta(days=365),'%Y%m%d')
         endDate = datetime.strftime(datetime.now() - timedelta(days=1),'%Y%m%d')
-        parser = argparse.ArgumentParser(description='目標：下載韓國ETF成分表 \
-            \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.js\
+        parser = argparse.ArgumentParser(description='目標：下載韓國ETF_NAV表 \
+            \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010304/GLB0507010304.jsp\
             \nOptional you can choose crawler date.\
-            \nDefault crawler date is your execute date - 1 \
-            \nExamples: python3 CB_News_Crawler.py --d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
+            \nDefault crawler date is your execute today\
+            \nExamples: python3 KOR_Crawler_ETF_NAV.py -d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
 
         parser.add_argument('-st', '--start', action='store', dest='startDate', type=str,
-                            help='enter endDate: YYYY/mm/dd', default=startDate)
+                            help='enter startDate: YYYY/mm/dd', default=startDate)
         parser.add_argument('-et', '--end', action='store', dest='endDate', type=str,
                             help='enter endDate: YYYY/mm/dd', default=endDate)
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
         #只要決定"根路徑"即可
         output_dir_path_dict  = json.load(open('pre/set.json','r'))
         #路徑設定 (不用更動這裡)
-        output_dir_path = f"{output_dir_path_dict['output_dir_path']}/NAV"
+        output_dir_path = f"{output_dir_path_dict['output_dir_path']}/KRX/ETF/NAV"
         if not os.path.exists(output_dir_path):
             log.processLog(f'建立根資料夾：{output_dir_path}')
             os.makedirs(output_dir_path)
@@ -131,7 +131,7 @@ if __name__ == '__main__':
         for row in codeEtf.iterrows():
             rowCount += 1
             row = row[1]
-            fileName = row['isu_cd']
+            fileName = row['Stock Abbrv Code']
             filePathName = f"{output_dir_path}/{fileName}_NAV.{fileType}"
             permitCode = GetPermitCode(row['isu_cd'],startDate,endDate)
             log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")

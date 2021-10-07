@@ -12,7 +12,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 
 
-def GetPermitCode(etfCode:str,endDate:str) -> str:
+def GetPermitCode(etfCode:str,Date:str) -> str:
     '''
         取得下載授權碼
     '''
@@ -26,7 +26,7 @@ def GetPermitCode(etfCode:str,endDate:str) -> str:
         "gubun":"00",
         "isu_cd":etfCode,
         "pagePath":"/contents/GLB/05/0507/0507010104/GLB0507010104.jsp",
-        "trd_dd":endDate,
+        "trd_dd":Date,
     }
 
     headers = {
@@ -83,7 +83,21 @@ def WriteFile(content:str,fileType:str,filePathName:str) -> None:
 if __name__ == '__main__':
     try:
         #參數呼叫設定
-        endDate = datetime.strftime(datetime.now() - timedelta(days=1),'%Y%m%d')
+        Date = datetime.strftime(datetime.now(),'%Y%m%d')
+
+        parser = argparse.ArgumentParser(description='目標：下載韓國ETF成分表 \
+            \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.jsp\
+            \nOptional you can choose crawler date.\
+            \nDefault crawler date is your execute date \
+            \nExamples: python3 KOR_Crawler_ETF_PCF.py -d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
+
+        parser.add_argument('-d', '--date', action='store', dest='Date', type=str,
+                            help='enter Date: YYYY-mm-dd', default=Date)
+
+        args = parser.parse_args()
+        Date = args.Date.replace('-','/')
+        
+
         parser = argparse.ArgumentParser(description='目標：下載韓國ETF成分表 \
             \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.js\
             \nOptional you can choose crawler date.\
@@ -91,11 +105,11 @@ if __name__ == '__main__':
             \nExamples: python3 CB_News_Crawler.py --d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
 
         parser.add_argument('-d', '--date', action='store', dest='date', type=str,
-                            help='enter endDate: YYYY/mm/dd', default=endDate)
+                            help='enter Date: YYYY/mm/dd', default=Date)
 
         args = parser.parse_args()
-        args.date = args.date.replace('/','')
-        endDate = args.date
+        args.date = args.date.replace('-','')
+        Date = args.date
 
 
         log.processLog('==============================================================================================')
@@ -109,13 +123,13 @@ if __name__ == '__main__':
         output_dir_path_dict  = json.load(open('pre/set.json','r'))
         
         #路徑設定 (不用更動這裡)
-        output_dir_path = f"{output_dir_path_dict['output_dir_path']}/PCF_Data"
+        output_dir_path = f"{output_dir_path_dict['output_dir_path']}/KRX/ETF/PCF"
         
         if not os.path.exists(output_dir_path):
             log.processLog(f'建立根資料夾：{output_dir_path}')
             os.makedirs(output_dir_path)
 
-        output_dir_date_path = f"{output_dir_path}/{endDate}"
+        output_dir_date_path = f"{output_dir_path}/{Date}"
         if not os.path.exists(output_dir_date_path):
             log.processLog(f'建立日期資料夾：{output_dir_date_path}')
             os.makedirs(output_dir_date_path)
@@ -130,13 +144,13 @@ if __name__ == '__main__':
         fileType = 'csv'
         
         log.processLog(f'開始爬取：韓國ETF成分網 - https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.jsp')
-        log.processLog(f'=== 本次查詢日期：${endDate}')
+        log.processLog(f'=== 本次查詢日期：${Date}')
         for row in codeEtf.iterrows():
             rowCount += 1
             row = row[1]
-            permitCode = GetPermitCode(row['isu_cd'],endDate)
+            permitCode = GetPermitCode(row['isu_cd'],Date)
             fileName = row['Stock Abbrv Code']
-            filePathName = f"{output_dir_date_path}/{fileName}_PCF_{endDate}"
+            filePathName = f"{output_dir_date_path}/{fileName}_PCF_{Date}"
             log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")
             r = GetFile(permitCode)
             log.processLog(f"===== [{rowCount}]_[檔案下載]：{fileName}")
@@ -145,7 +159,7 @@ if __name__ == '__main__':
                 if count >= 10:
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
                     log.processLog(f'------------------------------------------------------')
-                    log.processLog(f'【程序中止】 因遇十筆無資料，判斷{endDate}為韓國停市日，略過本日')
+                    log.processLog(f'【程序中止】 因遇十筆無資料，判斷{Date}為韓國停市日，略過本日')
                     break
                 else:
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
