@@ -97,7 +97,7 @@ if __name__ == '__main__':
         endDate = args.endDate
 
         log.processLog('==============================================================================================')
-        log.processLog('【開始執行韓國ETF_NAV爬蟲專案】 KOR_Crawler_NAV.py')
+        log.processLog(f'【開始執行韓國ETF_NAV爬蟲專案】 {os.path.basename(__file__)}')
         
         #計時開始
         start = t.perf_counter_ns() 
@@ -158,7 +158,7 @@ if __name__ == '__main__':
                     for fileRow in fileRows[:-1]:
                         writer.writerow(fileRow[1:-1].split('","'))
                     csvFile.close()
-                    log.processLog(f'===== [{rowCount}]_[檔案寫入]：{filePathName}.{fileType}')
+                    log.processLog(f'===== [{rowCount}]_[檔案寫入]：{filePathName}')
 
                 
                 else:
@@ -167,18 +167,19 @@ if __name__ == '__main__':
                     for fileRow in fileRows[:-1]:
                         writer.writerow(fileRow[1:-1].split('","'))
                     csvFile.close()
-                    log.processLog(f'===== [{rowCount}]_[檔案寫入]：{filePathName}.{fileType}')
+                    log.processLog(f'===== [{rowCount}]_[檔案寫入]：{filePathName}')
             
             log.processLog(f'------------------------------------------------------')
         
         #計時結束
         end = t.perf_counter_ns() 
 
-        log.processLog(f'【結束程序】 KOR_Crawler_NAV.py - 執行時間:{(end-start)/10**9}')
+        log.processLog(f'【結束程序】 {os.path.basename(__file__)} - 執行時間:{(end-start)/10**9}')
         log.processLog('==============================================================================================')
     
     except:
-
+        end = t.perf_counter_ns()
+        log.processLog(f'【程序錯誤】 {os.path.basename(__file__)} - 執行時間:{(end-start)/10**9}')
         log.processLog(f'【程序錯誤】：本次運行完成{rowCount-1}筆目標,剩餘{length-rowCount}筆未爬')
         log.processLog(f'【程序錯誤】：錯誤詳情請查看errorlog')
         log.processLog('==============================================================================================')

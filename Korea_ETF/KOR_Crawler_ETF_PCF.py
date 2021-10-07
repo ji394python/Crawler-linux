@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
 
         log.processLog('==============================================================================================')
-        log.processLog('【開始執行韓國ETF成份表爬蟲專案】 KOR_Crawler_PCF.py')
+        log.processLog(f'【開始執行韓國ETF成份表爬蟲專案】 {os.path.basename(__file__)}')
         
         #計時開始
         start = t.perf_counter_ns() 
@@ -135,7 +135,7 @@ if __name__ == '__main__':
             rowCount += 1
             row = row[1]
             permitCode = GetPermitCode(row['isu_cd'],endDate)
-            fileName = row['isu_cd'].replace(' ','_')
+            fileName = row['Stock Abbrv Code']
             filePathName = f"{output_dir_date_path}/{fileName}_PCF_{endDate}"
             log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")
             r = GetFile(permitCode)
@@ -157,11 +157,12 @@ if __name__ == '__main__':
         #計時結束
         end = t.perf_counter_ns() 
 
-        log.processLog(f'【結束程序】 KOR_Crawler_PCF.py - 執行時間:{(end-start)/10**9}')
+        log.processLog(f'【結束程序】 {os.path.basename(__file__)} - 執行時間:{(end-start)/10**9}')
         log.processLog('==============================================================================================')
 
     except:
-
+        end = t.perf_counter_ns()
+        log.processLog(f'【程序錯誤】 {os.path.basename(__file__)} - 執行時間:{(end-start)/10**9}')
         log.processLog(f'【程序錯誤】：本次運行完成{rowCount-1}筆目標,剩餘{length-rowCount}筆未爬')
         log.processLog(f'【程序錯誤】：錯誤詳情請查看errorlog')
         log.processLog('==============================================================================================')

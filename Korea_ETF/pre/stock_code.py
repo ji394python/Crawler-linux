@@ -10,4 +10,5 @@ for row in d['block1']:
     tgt_indx_nm.append(row['tgt_indx_nm'])
 
 df = pd.DataFrame({'isu_cd':isu_cd,'kor_shrt_isu_nm':kor_shrt_isu_nm,'tgt_indx_nm':tgt_indx_nm})
+df['Stock Abbrv Code'] = df.isu_cd.apply(lambda x:x[3:9])
 df.to_csv('etf_code.csv',encoding='utf-8-sig',index=False)

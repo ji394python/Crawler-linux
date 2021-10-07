@@ -1,3 +1,5 @@
 *.csv
 log
 __pycache__
+!etf_code.csv
+!KR_stk_list.csv
