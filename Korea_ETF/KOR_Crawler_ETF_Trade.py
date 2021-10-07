@@ -77,7 +77,7 @@ if __name__ == '__main__':
                 output_dir_path_dict  = json.load(open('pre/set.json','r'))
                 
                 #路徑設定 (不用更動這裡)
-                output_dir_path = f"{output_dir_path_dict['output_dir_path']}/KRX/ETF"
+                output_dir_path = f"{output_dir_path_dict['output_dir_path']}/KRX/ETF/Trade"
                 
                 if not os.path.exists(output_dir_path):
                         log.processLog(f'建立根資料夾：{output_dir_path}')
