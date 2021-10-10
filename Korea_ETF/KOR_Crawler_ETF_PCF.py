@@ -67,7 +67,7 @@ def GetFile(permitCode:str) -> requests.Response:
         if connect_count > 10:
             break
     return r 
-    
+
 def WriteFile(content:str,fileType:str,filePathName:str) -> None:
     '''
         寫入binaryData
@@ -160,6 +160,7 @@ if __name__ == '__main__':
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
                     log.processLog(f'------------------------------------------------------')
                     log.processLog(f'【程序中止】 因遇十筆無資料，判斷{Date}為韓國停市日，略過本日')
+                    os.system(f"rm -r -f {output_dir_date_path}")
                     break
                 else:
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')

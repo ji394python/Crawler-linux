@@ -142,10 +142,10 @@ if __name__ == '__main__':
             
             if len(fileRows) == 1:
                 count += 1
-                if count >= 10:
+                if count >= 30:
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
                     log.processLog(f'------------------------------------------------------')
-                    log.processLog(f'【程序中止】 因遇十筆無資料，判斷${startDate}-${endDate}為韓國停市日，略過本日')
+                    log.processLog(f'【程序中止】 因遇三十筆無資料，判斷${startDate}-${endDate}為韓國停市日，略過本日')
                     break
                 else:
                     log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')

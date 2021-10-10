@@ -48,20 +48,30 @@ def GetFile_Down(permitCode:str) -> requests.Response:
                 'x-requested-with': 'XMLHttpRequest'}
         new=requests.request('POST',url2,headers=header,data={"code":permitCode})
         connect_count = 0
-        while new.status_code != 200:
+        while ( (new.status_code != 200) or (new.text == '')):
                 time.sleep(5)
                 connect_count += 1
                 new=requests.request('POST',url2,headers=header,data={"code":permitCode})
-                if connect_count > 10:
+                if connect_count > 5:
                         break
 
         return new.text
 
-def WriteFile_Down(content:str,fileName:str,csvHead:list,encode:str) -> None:
+def WriteFile_Down(content:str,fileName:str,csvHead:list,encode:str) -> str:
         '''
                 寫入JsonData
         '''
-        csvRows = [re.findall('"(.*?)"',row) for row in content.split('\n')[1:]]
+        csvRow = [ row[1:-1].split('",') for row in content.split('\n')[1:]]
+        csvRows = []
+        for row in csvRow:
+                temp = []
+                for i in row:
+                        if i.find(',"') != -1:
+                                temp.append('')
+                                temp.append(i.replace(',"',''))
+                        else:
+                                temp.append(i.replace('"',''))
+                csvRows.append(temp)
         df = pd.DataFrame(csvRows,columns=csvHead)
         df.sort_values('Time',inplace=True)
         df.to_csv(fileName,encoding=encode,index=False)
@@ -69,6 +79,27 @@ def WriteFile_Down(content:str,fileName:str,csvHead:list,encode:str) -> None:
         return '200' 
 
 
+def CsvShutdown(lostDate:str,csvHead:list,csvRow:list,filePath:str,msgType:str) -> str:
+        if msgType == 'server':
+                date = [lostDate,'no data']
+                date.extend(csvRow)
+        elif msgType == 'client':
+                date = [lostDate,'exceed time']
+                date.extend(csvRow)
+        Head = ['lost_date','lost_type']
+        Head.extend(csvHead)
+        if not os.path.exists(filePath): #只有第一天建立才會跑來這
+                csvFile = open(filePath,'w+',encoding='utf-8-sig',newline='')
+                writer = csv.writer(csvFile) #開啟要存的檔案
+                writer.writerow(Head) #寫入列
+                writer.writerow(date)
+                csvFile.close()
+        else:
+                csvFile = open(filePath,'a',encoding='utf-8-sig',newline='')
+                writer = csv.writer(csvFile) #開啟要存的檔案
+                writer.writerow(date)
+                csvFile.close()
+        return '200'
 
 
 if __name__ == '__main__':
@@ -107,6 +138,7 @@ if __name__ == '__main__':
 
                 count = 0
                 rowCount = 0
+                lostFile = 0
                 length = len(codeStock)
 
                 for row in codeStock.iterrows():
@@ -120,14 +152,31 @@ if __name__ == '__main__':
                         
                         permitCode = GetPermitCode_Down(requestCode,f"A{requestAbbrvCode}/{requestAbbrvName}",f"A{requestAbbrvCode}")
                         log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")
-
+                        
                         resp = GetFile_Down(permitCode)
-                        log.processLog(f"===== [{rowCount}]_[檔案下載]：{fileName}")
-
-                        WriteFile_Down(resp,fileName,csvHead,'utf-8-sig')
-                        log.processLog(f'===== [{rowCount}]_[檔案寫入]：{fileName}')
-                        log.processLog(f'------------------------------------------------------')
-
+                        if resp == '':
+                                lostFile +=1
+                                log.processLog(f'===== [{rowCount}]_[檔案無值]：本日第${lostFile}筆遺失，計入{output_dir_path}/noExist.csv，')
+                                CsvShutdown(today,row.index.tolist(),row.values.tolist(),f"{output_dir_path}/noExist.csv",'server')
+                                log.processLog(f'------------------------------------------------------')
+                                continue
+                        elif resp == ",Time,Price,Change,Trading Valume (shr.),Trading Value (KRW)":
+                                count += 1
+                                if count >= 20:
+                                        log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
+                                        log.processLog(f'------------------------------------------------------')
+                                        log.processLog(f'【程序中止】 因遇二十筆無資料，判斷{today}為韓國停市日，略過本日')
+                                        os.system(f"rm -r -f {output_dir_date_path}")
+                                        break
+                                else:
+                                        log.processLog(f'===== [{rowCount}]_[檔案無值]：此為本日出現第({count})筆無任何資料')
+                        else:
+                                log.processLog(f"===== [{rowCount}]_[檔案下載]：{fileName}")
+                                
+                                WriteFile_Down(resp,fileName,csvHead,'utf-8-sig')
+                                log.processLog(f'===== [{rowCount}]_[檔案寫入]：{fileName}')
+                                log.processLog(f'------------------------------------------------------')
+                
 
                 end = time.perf_counter_ns()
                 log.processLog(f'【結束程序】 {os.path.basename(__file__)} - 執行時間:{(end-start)/10**9}')
