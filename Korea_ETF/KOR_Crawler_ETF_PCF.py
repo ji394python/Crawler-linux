@@ -83,7 +83,7 @@ def WriteFile(content:str,fileType:str,filePathName:str) -> None:
 if __name__ == '__main__':
     try:
         #參數呼叫設定
-        Date = datetime.strftime(datetime.now(),'%Y%m%d')
+        Date = datetime.strftime(datetime.now(),'%Y-%m-%d')
 
         parser = argparse.ArgumentParser(description='目標：下載韓國ETF成分表 \
             \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.jsp\
@@ -92,25 +92,11 @@ if __name__ == '__main__':
             \nExamples: python3 KOR_Crawler_ETF_PCF.py -d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
 
         parser.add_argument('-d', '--date', action='store', dest='Date', type=str,
-                            help='enter Date: YYYY-mm-dd', default=Date)
-
-        args = parser.parse_args()
-        Date = args.Date.replace('-','/')
-        
-
-        parser = argparse.ArgumentParser(description='目標：下載韓國ETF成分表 \
-            \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010302/GLB0507010302.js\
-            \nOptional you can choose crawler date.\
-            \nDefault crawler date is your execute date - 1 \
-            \nExamples: python3 CB_News_Crawler.py --d 2021/06/30 ', formatter_class=RawTextHelpFormatter)
-
-        parser.add_argument('-d', '--date', action='store', dest='date', type=str,
                             help='enter Date: YYYY/mm/dd', default=Date)
 
         args = parser.parse_args()
-        args.date = args.date.replace('-','')
-        Date = args.date
-
+        Date = args.Date.replace('/','-')
+        
 
         log.processLog('==============================================================================================')
         log.processLog(f'【開始執行韓國ETF成份表爬蟲專案】 {os.path.basename(__file__)}')
@@ -148,7 +134,7 @@ if __name__ == '__main__':
         for row in codeEtf.iterrows():
             rowCount += 1
             row = row[1]
-            permitCode = GetPermitCode(row['isu_cd'],Date)
+            permitCode = GetPermitCode(row['isu_cd'],Date.replace('-',''))
             fileName = row['Stock Abbrv Code']
             filePathName = f"{output_dir_date_path}/{fileName}_PCF_{Date}"
             log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")

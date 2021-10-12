@@ -110,7 +110,7 @@ if __name__ == '__main__':
                 start = time.perf_counter_ns()
 
                 #日期設定
-                today = datetime.now().strftime('%Y%m%d') 
+                today = datetime.now().strftime('%Y-%m-%d') 
 
                 log.processLog('==============================================================================================')
                 log.processLog(f'【開始執行韓國Stock日內交易價爬蟲專案】 {os.path.basename(__file__)}')

@@ -117,7 +117,7 @@ if __name__ == '__main__':
                 start = time.perf_counter_ns()
 
                 #日期設定
-                today = datetime.now().strftime('%Y%m%d') 
+                today = datetime.now().strftime('%Y-%m-%d') 
 
                 #路徑設定 (需手動更新的地方)
                 #只要決定"根路徑"即可

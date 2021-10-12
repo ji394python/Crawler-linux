@@ -77,8 +77,8 @@ if __name__ == '__main__':
     try:
         #參數呼叫設定
         #日期設定
-        startDate = datetime.strftime(datetime.now() - timedelta(days=365),'%Y%m%d')
-        endDate = datetime.strftime(datetime.now() - timedelta(days=1),'%Y%m%d')
+        startDate = datetime.strftime(datetime.now() - timedelta(days=365),'%Y-%m-%d')
+        endDate = datetime.strftime(datetime.now() - timedelta(days=1),'%Y-%m-%d')
         parser = argparse.ArgumentParser(description='目標：下載韓國ETF_NAV表 \
             \n網址：https://global.krx.co.kr/contents/GLB/05/0507/0507010304/GLB0507010304.jsp\
             \nOptional you can choose crawler date.\
@@ -91,8 +91,8 @@ if __name__ == '__main__':
                             help='enter endDate: YYYY/mm/dd', default=endDate)
 
         args = parser.parse_args()
-        args.startDate = args.startDate.replace('/','')
-        args.endDate = args.endDate.replace('/','')
+        args.startDate = args.startDate.replace('/','-')
+        args.endDate = args.endDate.replace('/','-')
         startDate = args.startDate
         endDate = args.endDate
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
             row = row[1]
             fileName = row['Stock Abbrv Code']
             filePathName = f"{output_dir_path}/{fileName}_NAV.{fileType}"
-            permitCode = GetPermitCode(row['isu_cd'],startDate,endDate)
+            permitCode = GetPermitCode(row['isu_cd'],startDate.replace('-',''),endDate.replace('-',''))
             log.processLog(f"===== [{rowCount}]_[取認證碼]：{fileName}")
             r = GetFile(permitCode)
             fileRows = r.text.split('\n')
