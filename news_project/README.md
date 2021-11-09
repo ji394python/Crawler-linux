@@ -3,7 +3,7 @@
 
 ### 1. 執行方式
 - Step1：修改 `set.json` 將根路徑改為需要的
-- Step2：執行 `python news_crawler.py` 爬取昨日新聞
+- Step2：執行 `python news_crawler.py` 爬取昨日~前三十日新聞 (迴圈執行`twse_mops_crawler.py`)
 - Step3：執行 `python parsing.py` 剖析新聞
 - Step4：執行 `python TWSE_crawler.py` 啟動驗證程序
 - Step4：執行 `python transform.py` 對剖析檔做ETL
@@ -137,7 +137,11 @@
 ## 四、運作機制補充 <span style="font-size:12px"> 記錄各種補充事項 </span>
 <hr>
 
-### 1. 更新紀錄
+### 1. 更新/補爬紀錄
+  - 10/19：新增環境偵測機制，根據環境不同執行不同代碼 (Linux or win32)
+  - 10/07：發現data.csv最末段行出現header導致`TWSE_Crawler.py`出現運行錯誤，故本日刪除data.csv最後一行且補執行`TWSE_Crawler.py`
+    - 受影響天數為10/01~10/07，但補爬蟲後也僅增加ETF的停券資訊，故未影響主流程
+    - 同步刪除news_crawler/ERROR.log
   - 08/20：新增證交所/櫃買中心停券預告表的驗證機制，若我們剖析的檔案有缺漏時，可從證交所/櫃買中心補上 (`TWSE_crawler.py`)
   - 07/23：補充: 每年年末要更新 `stock_index_confirm.csv` 和 `holiday.csv` 以確保股票代碼/假日日期是正確的
   - 07/22：將預設爬取日期改為 -29天 ~ -1天、新增爬蟲的log，置於news_crawler資料夾下

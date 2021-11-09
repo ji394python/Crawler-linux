@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Jul 15 04:25:41 2020
-Last Modified：07/08
+Last Modified：10/19
 
 @author: ATM、Denver Liu
 
 """
 import os
+import sys
+sys.path.append('..')
+import log_manager as log
 #import twse_mops_crawler
 import pandas as pd
 from datetime import date
@@ -45,14 +48,21 @@ if __name__ == '__main__':
     #路徑設定 (不用更動這裡)
     output_dir_path = os.path.join(output_dir_path,'News_Stocks')
 
-    if os.path.exists(output_dir_path) == False:
+    if not os.path.exists(output_dir_path):
         os.makedirs(output_dir_path)
 
     dates=pd.date_range(start=args.startDate, end=args.endDate)
 
+    #得到運行環境
+    platform = sys.platform
+
     for date_temp in dates:
         date=date_temp.strftime("%Y %m %d")
-        os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux 
-        #os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        if platform == 'win32':
+            os.system('python twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #windows
+        elif platform == 'linux':
+            os.system('python3 twse_mops_crawler.py {date} {path}'.format(date=date,path=output_dir_path)) #linux
+        else:
+            log.processLog(f"本次執行環境為：{platform},非win32 or linux，故程序終止")
+            print(f"本次執行環境為：{platform},非win32 or linux，故程序終止")
         sleep(2)
-    
