@@ -2,11 +2,11 @@
 #!/bin/bash
 #手動操作時可用此
 cd news_crawler
-python3 news_crawler.py -st 2021/01/01 -et 2021/08/18
+python news_crawler.py -st 2022/03/13 -et 2021/03/19
 cd ..
-python3 parsing.py
+python parsing.py
 cd news_crawler
-python3 TWSE_crawler.py 
+python TWSE_crawler.py 
 rm -f twse_future.csv
 cd ..
-python3 transform.py
+python transform.py

@@ -94,7 +94,7 @@
 - `set.json`：路徑設定檔
 
 ### 2. 程式檔功能
-- `news_crawler.py`：執行twse_mops_crawler.py的主程式檔 (手動使用,未加入排程)
+- `news_crawler.py`：執行twse_mops_crawler.py的主程式檔 
 - `twse_mops_crawler.py`：爬取公開資訊觀測站重大訊息公告的主程式檔 (執行頻率：1/days)
   - 爬取網站：https://mops.twse.com.tw/mops/web/t05st02
 
@@ -138,13 +138,17 @@
 <hr>
 
 ### 1. 更新/補爬紀錄
-  - 10/19：新增環境偵測機制，根據環境不同執行不同代碼 (Linux or win32)
-  - 10/07：發現data.csv最末段行出現header導致`TWSE_Crawler.py`出現運行錯誤，故本日刪除data.csv最後一行且補執行`TWSE_Crawler.py`
+  - 2022/04/09：2022/03/23新聞缺乏的原因不明，猜測和另一專案(IB)的錯誤相同，應該是NAS資料庫的問題，**若未來仍再發生此情況，會再連帶使`parsing.py`和爬蟲一樣也重複30天**
+  - 2022/04/08：
+    - 修改爬蟲補爬程序`TWSE_crawler.py`，因證交所API的encode由'big5->ms950'
+    - 更新預資料`holiday.csv`，納入2022的公告假期，避免`parsing.py`計算T-6交易日時出錯
+  - 2021/10/19：新增環境偵測機制，根據環境不同執行不同代碼 (Linux or win32)
+  - 2021/10/07：發現data.csv最末段行出現header導致`TWSE_Crawler.py`出現運行錯誤，故本日刪除data.csv最後一行且補執行`TWSE_Crawler.py`
     - 受影響天數為10/01~10/07，但補爬蟲後也僅增加ETF的停券資訊，故未影響主流程
     - 同步刪除news_crawler/ERROR.log
-  - 08/20：新增證交所/櫃買中心停券預告表的驗證機制，若我們剖析的檔案有缺漏時，可從證交所/櫃買中心補上 (`TWSE_crawler.py`)
-  - 07/23：補充: 每年年末要更新 `stock_index_confirm.csv` 和 `holiday.csv` 以確保股票代碼/假日日期是正確的
-  - 07/22：將預設爬取日期改為 -29天 ~ -1天、新增爬蟲的log，置於news_crawler資料夾下
+  - 2021/08/20：新增證交所/櫃買中心停券預告表的驗證機制，若我們剖析的檔案有缺漏時，可從證交所/櫃買中心補上 (`TWSE_crawler.py`)
+  - 2021/07/23：補充: 每年年末要更新 `stock_index_confirm.csv` 和 `holiday.csv` 以確保股票代碼/假日日期是正確的
+  - 2021/07/22：將預設爬取日期改為 -29天 ~ -1天、新增爬蟲的log，置於news_crawler資料夾下
 
 ### 2. 規則補充
   - 2015/03/16後為<a href="https://www.twse.com.tw/ch/products/publication/download/0001001837.pdf">停券起訖日新法規</a>的開始日，故從2015/04/01後開始驗證
