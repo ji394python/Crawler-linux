@@ -1,0 +1,46 @@
+{
+    "Split": {
+        "Key": ["Split"],
+        "Multi Check": []
+    },
+    "Dividend": {
+        "Key": ["Dividend", "Distribution"],
+        "Multi Check": []
+    },
+    "Launch": {
+        "Key": ["Launch"],
+        "Multi Check": []
+    },
+    "Lineup": {
+        "Key": ["Lineup"],
+        "Multi Check": []
+    },
+    "Halt": {
+        "Key": ["Halt"],
+        "Multi Check": []
+    },
+    "Terminate": {
+        "Key": ["Terminate", "Liquidate", "Close", "Terminating", "Liquidating", "Closing"],
+        "Multi Check": []
+    },
+    "Expose": {
+        "Key": ["Expose"],
+        "Multi Check": []
+    },
+    "Suspend": {
+        "Key": ["Suspend"],
+        "Multi Check": []
+    },
+    "Creation": {
+        "Key": ["Creation", "Redemption"],
+        "Multi Check": []
+    },
+    "Conver": {
+        "Key": ["Conver"],
+        "Multi Check": []
+    },
+    "Index Change": {
+        "Key": [],
+        "Multi Check": ["Index", "Change"]
+    }
+}
