@@ -5,6 +5,7 @@ import os
 import csv
 from datetime import datetime, tzinfo
 from dateutil import tz
+from random import random
 #import log_manager as log
 
 #- 未標準化檔案：  Shortable\IB\{Country}\ {Date}\Base \{Country}_Shortable_{YY-MM-DD}_{HH:MM:SS}.csv
@@ -88,12 +89,13 @@ if __name__ == '__main__':
     for file in ftp.nlst():
         index = file.rfind('.txt')
         if file[index:] == '.txt':
-
-            downloadFile(ftp,file, output_dir_path + '/Shortable/IB/Raw/'+file )
+            output = f"N{int(random()*100000)}.txt"
+            
+            downloadFile(ftp,file, output_dir_path + '/Shortable/IB/Raw/'+output )
             
             name = country[file[:-4]]['alpha2']
             
-            convertCsv(output_dir_path + '/Shortable/IB/Raw/'+file,output_dir_path + '/Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
+            convertCsv(output_dir_path + '/Shortable/IB/Raw/'+output,output_dir_path + '/Shortable/IB/'+name+'/Base/'+name+'_Shortable_')
 
     os.system(f'rm -r {output_dir_path + "/Shortable/IB/Raw"}')
 
@@ -101,3 +103,4 @@ if __name__ == '__main__':
         f.write(f"{datetime.now()}")
         f.write('\n')
         f.close()
+
